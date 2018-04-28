@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addBar, getFoo } from './foo';
+import { addBarAsync, getFoo } from './foo';
 
 class Home extends Component {
   handleClick = () => {
@@ -29,7 +29,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addBar: bar => dispatch(addBar(bar)),
+  addBar: bar => dispatch(addBarAsync(bar)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
