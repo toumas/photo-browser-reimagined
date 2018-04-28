@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import foo from './foo';
+import photos from './photos';
 
 export default combineReducers({
-  foo,
+  photos,
 });

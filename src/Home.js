@@ -1,35 +1,9 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { addBarAsync, getFoo } from './foo';
+import React from 'react';
+import PhotosContainer from './PhotosContainer';
+import PhotoList from './PhotoList';
 
-class Home extends Component {
-  handleClick = () => {
-    this.props.addBar('bar');
-  };
+const Home = () => (
+  <PhotosContainer>{props => <PhotoList {...props} />}</PhotosContainer>
+);
 
-  render() {
-    return (
-      <div>
-        <h1>Home</h1>
-        <div>props:</div>
-        <pre>{JSON.stringify(this.props, null, 4)}</pre>
-        <button onClick={this.handleClick}>Add bar</button>
-      </div>
-    );
-  }
-}
-
-Home.propTypes = {
-  addBar: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = state => ({
-  foo: getFoo(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-  addBar: bar => dispatch(addBarAsync(bar)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;
