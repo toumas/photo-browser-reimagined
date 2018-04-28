@@ -1,8 +1,8 @@
 module.exports = {
-  extends: "airbnb",
-  parser: "babel-eslint",
+  extends: ['airbnb', 'prettier'],
+  parser: 'babel-eslint',
   rules: {
-    "linebreak-style": 0,
-    "react/jsx-filename-extension": 0
-  }
+    'linebreak-style': 0,
+    'react/jsx-filename-extension': 0,
+  },
 };
