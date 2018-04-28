@@ -14,6 +14,12 @@ export function addBar(bar) {
   return { type: ADD, bar };
 }
 
+export const addBarAsync = bar => (dispatch) => {
+  setTimeout(() => {
+    dispatch(addBar(bar));
+  }, 1000);
+};
+
 export function getFoo(state) {
   return state.foo;
 }
