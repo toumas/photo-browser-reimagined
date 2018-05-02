@@ -5,12 +5,35 @@ import { fetchPhotos } from './photos';
 import { photoShape } from './shapes';
 
 class PhotosContainer extends Component {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.params.page !== prevState.options.page) {
+      return {
+        ...prevState,
+        options: { ...prevState.options, page: nextProps.params.page },
+      };
+    }
+    return null;
+  }
+
+  state = {
+    options: {
+      page: 1,
+      limit: 10,
+    },
+  };
+
   componentDidMount() {
-    this.props.fetchPhotos();
+    this.props.fetchPhotos(this.state.options);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.options.page !== prevState.options.page) {
+      this.props.fetchPhotos(this.state.options);
+    }
   }
 
   fetchPhotos = () => {
-    this.props.fetchPhotos();
+    this.props.fetchPhotos(this.state.options);
   };
 
   render() {
@@ -35,7 +58,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchPhotos: () => dispatch(fetchPhotos()),
+  fetchPhotos: options => dispatch(fetchPhotos(options)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PhotosContainer);
