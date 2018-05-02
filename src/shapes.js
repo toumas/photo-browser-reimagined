@@ -7,3 +7,14 @@ export const photoShape = {
   title: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
 };
+
+export const paramsShape = {
+  page: PropTypes.string,
+};
+
+export const matchShape = {
+  isExact: PropTypes.bool.isRequired,
+  params: PropTypes.shape(paramsShape),
+  path: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+};

@@ -28,10 +28,10 @@ export const success = items => ({ type: SUCCESS, isLoading: false, items });
 
 export const fail = () => ({ type: FAIL, isLoading: false });
 
-export const fetchPhotos = () => async dispatch => {
+export const fetchPhotos = options => async dispatch => {
   dispatch(loading());
   try {
-    const photos = await getPhotos();
+    const photos = await getPhotos(options);
     const normalizedData = normalize(photos, photoList);
     dispatch(success(normalizedData.entities.photos));
   } catch (err) {
