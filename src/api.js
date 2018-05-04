@@ -8,9 +8,15 @@ function optionsToQueryParams(options) {
   )}`.replace(',', '');
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export const getPhotos = async options => {
   const queryParams = optionsToQueryParams(options);
   const response = await fetch(`${base}/photos?${queryParams}`);
+  return response.json();
+};
+
+export const getPhoto = async id => {
+  const options = { expand: 'album' };
+  const queryParams = optionsToQueryParams(options);
+  const response = await fetch(`${base}/photos/${id}?${queryParams}`);
   return response.json();
 };

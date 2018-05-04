@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import photoShape from './shapes';
 
-const PhotoList = ({ isLoading, failed, photos, retry }) => {
+const PhotoList = ({ isLoading, failed, photos, retry, handleClick }) => {
   if (isLoading) {
     return 'Loading...';
   } else if (failed) {
@@ -16,7 +16,9 @@ const PhotoList = ({ isLoading, failed, photos, retry }) => {
   return (
     <div>
       {photos.map(photo => (
-        <img key={photo.id} src={photo.thumbnailUrl} alt={photo.title} />
+        <button key={photo.id} onClick={handleClick(photo.id)}>
+          <img src={photo.thumbnailUrl} alt={photo.title} />
+        </button>
       ))}
     </div>
   );
