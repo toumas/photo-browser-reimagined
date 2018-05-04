@@ -8,6 +8,15 @@ export const photoShape = {
   url: PropTypes.string.isRequired,
 };
 
+export const photoShapeOptional = {
+  album: PropTypes.number,
+  albumId: PropTypes.number,
+  id: PropTypes.number,
+  thumbnailUrl: PropTypes.string,
+  title: PropTypes.string,
+  url: PropTypes.string,
+};
+
 export const paramsShape = {
   page: PropTypes.string,
 };

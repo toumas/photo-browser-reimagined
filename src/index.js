@@ -6,6 +6,8 @@ import { Route, Switch } from 'react-router';
 import { ConnectedRouter } from 'react-router-redux';
 import { store, history } from './store';
 import Home from './Home';
+import PhotoContainer from './PhotoContainer';
+import Photo from './photo';
 
 const App = () => (
   <Provider store={store}>
@@ -13,6 +15,14 @@ const App = () => (
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/page/:page" render={props => <Home {...props} />} />
+        <Route
+          path="/photo/:id"
+          render={({ match }) => (
+            <PhotoContainer match={match}>
+              {props => <Photo {...props} />}
+            </PhotoContainer>
+          )}
+        />
       </Switch>
     </ConnectedRouter>
   </Provider>
