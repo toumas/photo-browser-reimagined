@@ -26,6 +26,7 @@ const PhotoList = ({ isLoading, failed, photos, retry, handleClick }) => {
 
 PhotoList.propTypes = {
   failed: PropTypes.bool.isRequired,
+  handleClick: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   photos: PropTypes.arrayOf(PropTypes.shape(photoShape)).isRequired,
   retry: PropTypes.func.isRequired,
