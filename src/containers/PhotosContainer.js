@@ -2,8 +2,8 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
-import { fetchPhotos } from './photos';
-import { photoShape, matchShape } from './shapes';
+import { fetchPhotos } from '../ducks/photos';
+import { photoShape, matchShape } from '../shapes';
 
 class PhotosContainer extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {

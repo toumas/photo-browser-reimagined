@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import photoShape from './shapes';
+import photoShape from '../shapes';
 
 const PhotoList = ({ isLoading, failed, photos, retry, handleClick }) => {
   if (isLoading) {

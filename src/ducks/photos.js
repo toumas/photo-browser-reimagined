@@ -1,6 +1,6 @@
 import { normalize } from 'normalizr';
-import { getPhotos } from './api';
-import { photoList } from './schemas';
+import { getPhotos } from '../api';
+import { photoList } from '../schemas';
 
 const LOADING = 'APP/PHOTOS/LOADING';
 const SUCCESS = 'APP/PHOTOS/SUCCESS';

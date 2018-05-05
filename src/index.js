@@ -5,9 +5,9 @@ import { Provider } from 'react-redux';
 import { Route, Switch } from 'react-router';
 import { ConnectedRouter } from 'react-router-redux';
 import { store, history } from './store';
-import Home from './Home';
-import PhotoContainer from './PhotoContainer';
-import Photo from './photo';
+import Home from './components/Home';
+import PhotoContainer from './containers/PhotoContainer';
+import Photo from './components/photo';
 
 const App = () => (
   <Provider store={store}>

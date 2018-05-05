@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
-import PhotosContainer from './PhotosContainer';
+import PhotosContainer from '../containers/PhotosContainer';
 import PhotoList from './PhotoList';
-import PhotoContainer from './PhotoContainer';
-import { matchShape } from './shapes';
+import PhotoContainer from '../containers/PhotoContainer';
+import { matchShape } from '../shapes';
 import Photo from './photo';
 
 const Home = ({ match }) => (
