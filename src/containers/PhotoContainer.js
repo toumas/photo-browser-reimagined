@@ -23,9 +23,9 @@ class PhotoContainer extends Component {
 }
 
 const mapStateToProps = state => ({
+  failed: getFailed(state),
+  isLoading: getIsLoading(state),
   photo: getPhoto(state),
-  isLoading: getFailed(state),
-  failed: getIsLoading(state),
 });
 
 const mapDispatchToProps = dispatch => ({
