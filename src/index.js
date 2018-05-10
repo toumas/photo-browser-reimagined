@@ -8,6 +8,7 @@ import { store, history } from './store';
 import Home from './components/Home';
 import PhotoContainer from './containers/PhotoContainer';
 import Photo from './components/photo';
+import AlbumsContainer from './containers/AlbumsContainer';
 
 const App = () => (
   <Provider store={store}>
@@ -21,6 +22,12 @@ const App = () => (
             <PhotoContainer match={match}>
               {props => <Photo {...props} />}
             </PhotoContainer>
+          )}
+        />
+        <Route
+          path="/albums/page/:page"
+          render={({ match }) => (
+            <AlbumsContainer match={match}>{() => null}</AlbumsContainer>
           )}
         />
       </Switch>

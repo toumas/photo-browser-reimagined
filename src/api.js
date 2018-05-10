@@ -20,3 +20,9 @@ export const getPhoto = async id => {
   const response = await fetch(`${base}/photos/${id}?${queryParams}`);
   return response.json();
 };
+
+export const getAlbums = async options => {
+  const queryParams = optionsToQueryParams(options);
+  const response = await fetch(`${base}/albums?${queryParams}`);
+  return response.json();
+};
