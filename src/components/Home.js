@@ -13,6 +13,7 @@ const Home = ({ match }) => (
       <React.Fragment>
         <PhotoList {...props} />
         <Route
+          exact
           path={`${match.url}/photo/:id`}
           render={({ match: photoMatch }) => (
             <React.Fragment>

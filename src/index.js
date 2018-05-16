@@ -17,6 +17,7 @@ const App = () => (
         <Route exact path="/" component={Home} />
         <Route path="/page/:page" render={props => <Home {...props} />} />
         <Route
+          exact
           path="/photo/:id"
           render={({ match }) => (
             <PhotoContainer match={match}>
@@ -25,6 +26,7 @@ const App = () => (
           )}
         />
         <Route
+          exact
           path="/albums/page/:page"
           render={({ match }) => (
             <AlbumsContainer match={match}>{() => null}</AlbumsContainer>
