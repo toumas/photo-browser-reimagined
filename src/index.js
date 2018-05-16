@@ -7,7 +7,7 @@ import { ConnectedRouter } from 'react-router-redux';
 import { store, history } from './store';
 import Home from './components/Home';
 import PhotoContainer from './containers/PhotoContainer';
-import Photo from './components/photo';
+import Photo from './components/Photo';
 import AlbumsContainer from './containers/AlbumsContainer';
 
 const App = () => (
