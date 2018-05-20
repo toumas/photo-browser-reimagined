@@ -1,6 +1,12 @@
 import { normalize } from 'normalizr';
-import { getAlbums as apiGetAlbums } from '../api';
-import { albumList } from '../schemas';
+import { getAlbums as apiGetAlbums, getPhotos } from '../api';
+import { albumList, photoList } from '../schemas';
+import {
+  success as photosSuccess,
+  loading as photosLoading,
+  fail as photosFail,
+  getThumbnails,
+} from './photos';
 
 const LOADING = 'APP/ALBUMS/LOADING';
 const SUCCESS = 'APP/ALBUMS/SUCCESS';
@@ -22,9 +28,21 @@ export default function reducer(
   }
 }
 
-export const getAlbums = state => state.albums.items;
 export const getFailed = state => state.albums.failed;
 export const getIsLoading = state => state.albums.isLoading;
+export const getAlbums = state => {
+  if (getIsLoading(state)) {
+    return {};
+  }
+  const thumbnails = getThumbnails(state);
+  return Object.entries(thumbnails).reduce(
+    (acc, entry) => ({
+      ...acc,
+      [entry[0]]: { ...state.albums.items[entry[0]], thumbnailUrl: entry[1] },
+    }),
+    {},
+  );
+};
 
 export const loading = () => ({ type: LOADING, isLoading: true });
 
@@ -37,6 +55,17 @@ export const fetchAlbums = options => async dispatch => {
   try {
     const albums = await apiGetAlbums(options);
     const normalizedData = normalize(albums, albumList);
+    dispatch(photosLoading());
+    try {
+      const photos = await Promise.all(
+        normalizedData.result.map(albumId => getPhotos({ albumId, limit: 1 })),
+      );
+      const normalizedPhotos = normalize(photos, [photoList]);
+      dispatch(photosSuccess(normalizedPhotos.entities.photos));
+    } catch (err) {
+      dispatch(photosFail());
+    }
+
     dispatch(success(normalizedData.entities.albums));
   } catch (err) {
     dispatch(fail());
