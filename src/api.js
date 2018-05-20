@@ -2,10 +2,27 @@ const base = 'http://localhost:3000';
 // eslint-disable-next-line no-undef
 const { fetch } = window;
 
+const methods = [
+  'page',
+  'limit',
+  'sort',
+  'order',
+  'start',
+  'end',
+  'gte',
+  'lte',
+  'ne',
+  'like',
+  'embed',
+  'expand',
+];
+
 function optionsToQueryParams(options) {
-  return `${Object.entries(options).map(
-    entry => `_${entry[0]}=${entry[1]}&`,
-  )}`.replace(',', '');
+  return Object.entries(options).reduce(
+    (acc, entry) =>
+      `${acc}${methods.includes(entry[0]) ? '_' : ''}${entry[0]}=${entry[1]}&`,
+    '',
+  );
 }
 
 export const getPhotos = async options => {
