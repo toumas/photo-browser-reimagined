@@ -5,7 +5,7 @@ import PhotosContainer from '../containers/PhotosContainer';
 import PhotoList from './PhotoList';
 import PhotoContainer from '../containers/PhotoContainer';
 import { matchShape } from '../shapes';
-import Photo from './photo';
+import Photo from './Photo';
 
 const Home = ({ match }) => (
   <PhotosContainer match={match}>
@@ -13,6 +13,7 @@ const Home = ({ match }) => (
       <React.Fragment>
         <PhotoList {...props} />
         <Route
+          exact
           path={`${match.url}/photo/:id`}
           render={({ match: photoMatch }) => (
             <React.Fragment>

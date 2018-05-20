@@ -1,34 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import photoShape from '../shapes';
+import { Link } from 'react-router-dom';
+import { itemShape } from '../shapes';
 
-const PhotoList = ({ isLoading, failed, photos, retry, handleClick }) => {
+const PhotoList = ({ isLoading, failed, items, retry, children, getPath }) => {
   if (isLoading) {
     return 'Loading...';
   } else if (failed) {
     return (
       <div>
-        <span>Failed to load photos</span>
+        <span>Failed to load content</span>
         <button onClick={retry}>Retry</button>
       </div>
     );
   }
   return (
     <div>
-      {photos.map(photo => (
-        <button key={photo.id} onClick={handleClick(photo.id)}>
-          <img src={photo.thumbnailUrl} alt={photo.title} />
-        </button>
+      {items.map(item => (
+        <React.Fragment key={item.id}>
+          <Link to={getPath(item.id)}>
+            <img src={item.thumbnailUrl} alt={item.title} />
+          </Link>
+          {children(item)}
+        </React.Fragment>
       ))}
     </div>
   );
 };
 
+PhotoList.defaultProps = {
+  children: () => null,
+};
+
 PhotoList.propTypes = {
+  children: PropTypes.func,
   failed: PropTypes.bool.isRequired,
-  handleClick: PropTypes.func.isRequired,
+  getPath: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  photos: PropTypes.arrayOf(PropTypes.shape(photoShape)).isRequired,
+  items: PropTypes.arrayOf(PropTypes.shape(itemShape)).isRequired,
   retry: PropTypes.func.isRequired,
 };
 
