@@ -5,7 +5,7 @@ import PhotosContainer from '../containers/PhotosContainer';
 import PhotoList from './PhotoList';
 import PhotoContainer from '../containers/PhotoContainer';
 import { matchShape } from '../shapes';
-import Photo from './photo';
+import Photo from './Photo';
 
 const Home = ({ match }) => (
   <PhotosContainer match={match}>
