@@ -1,5 +1,5 @@
 import { normalize } from 'normalizr';
-import { getPhotos } from '../api';
+import { getPhotos as apiGetPhotos } from '../api';
 import { photoList } from '../schemas';
 
 const LOADING = 'APP/PHOTOS/LOADING';
@@ -22,6 +22,10 @@ export default function reducer(
   }
 }
 
+export const getPhotos = state => state.photos.items;
+export const getFailed = state => state.photos.failed;
+export const getIsLoading = state => state.photos.isLoading;
+
 export const loading = () => ({ type: LOADING, isLoading: true });
 
 export const success = items => ({ type: SUCCESS, isLoading: false, items });
@@ -31,7 +35,7 @@ export const fail = () => ({ type: FAIL, isLoading: false });
 export const fetchPhotos = options => async dispatch => {
   dispatch(loading());
   try {
-    const photos = await getPhotos(options);
+    const photos = await apiGetPhotos(options);
     const normalizedData = normalize(photos, photoList);
     dispatch(success(normalizedData.entities.photos));
   } catch (err) {

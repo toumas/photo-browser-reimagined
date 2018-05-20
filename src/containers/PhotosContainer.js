@@ -2,7 +2,12 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
-import { fetchPhotos } from '../ducks/photos';
+import {
+  fetchPhotos,
+  getFailed,
+  getIsLoading,
+  getPhotos,
+} from '../ducks/photos';
 import { photoShape, matchShape } from '../shapes';
 
 class PhotosContainer extends Component {
@@ -80,9 +85,9 @@ PhotosContainer.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  failed: state.photos.failed,
-  isLoading: state.photos.isLoading,
-  photos: Object.values(state.photos.items),
+  failed: getFailed(state),
+  isLoading: getIsLoading(state),
+  photos: Object.values(getPhotos(state)),
 });
 
 const mapDispatchToProps = dispatch => ({
