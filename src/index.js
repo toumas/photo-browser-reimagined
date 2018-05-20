@@ -9,7 +9,7 @@ import Home from './components/Home';
 import PhotoContainer from './containers/PhotoContainer';
 import Photo from './components/Photo';
 import AlbumsContainer from './containers/AlbumsContainer';
-import AlbumList from './components/AlbumList';
+import PhotoList from './components/PhotoList';
 
 const App = () => (
   <Provider store={store}>
@@ -31,7 +31,11 @@ const App = () => (
           path="/albums"
           render={({ match }) => (
             <AlbumsContainer match={match}>
-              {props => <AlbumList {...props} />}
+              {props => (
+                <PhotoList {...props}>
+                  {photo => <span>{photo.title}</span>}
+                </PhotoList>
+              )}
             </AlbumsContainer>
           )}
         />
@@ -40,7 +44,11 @@ const App = () => (
           path="/albums/page/:page"
           render={({ match }) => (
             <AlbumsContainer match={match}>
-              {props => <AlbumList {...props} />}
+              {props => (
+                <PhotoList {...props}>
+                  {photo => <span>{photo.title}</span>}
+                </PhotoList>
+              )}
             </AlbumsContainer>
           )}
         />

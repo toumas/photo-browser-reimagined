@@ -33,3 +33,8 @@ export const albumShape = {
   title: PropTypes.string.isRequired,
   userId: PropTypes.number.isRequired,
 };
+
+export const itemShape = {
+  id: PropTypes.number.isRequired,
+  thumbnailUrl: PropTypes.string.isRequired,
+};

@@ -25,6 +25,11 @@ export default function reducer(
 export const getPhotos = state => state.photos.items;
 export const getFailed = state => state.photos.failed;
 export const getIsLoading = state => state.photos.isLoading;
+export const getThumbnails = state =>
+  Object.values(getPhotos(state)).reduce(
+    (acc, photo) => ({ ...acc, [photo.albumId]: photo.thumbnailUrl }),
+    {},
+  );
 
 export const loading = () => ({ type: LOADING, isLoading: true });
 

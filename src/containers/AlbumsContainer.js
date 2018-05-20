@@ -7,7 +7,7 @@ import {
   getIsLoading,
   getAlbums,
 } from '../ducks/albums';
-import { albumShape } from '../shapes';
+import { albumShape, matchShape } from '../shapes';
 
 class AlbumsContainer extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -49,19 +49,22 @@ class AlbumsContainer extends Component {
     }
   }
 
+  getPath = id =>
+    this.props.getPath(this.props.match.url, this.state.options.page, id);
+
   fetchAlbums = () => {
     this.props.fetchAlbums(this.state.options);
   };
 
   render() {
-    const { albums, children, failed, isLoading } = this.props;
+    const { albums: items, children, failed, isLoading } = this.props;
 
     return children({
-      albums,
-      children,
+      items,
       failed,
       isLoading,
       retry: this.fetchAlbums,
+      getPath: this.getPath,
     });
   }
 }
@@ -69,9 +72,11 @@ class AlbumsContainer extends Component {
 AlbumsContainer.propTypes = {
   albums: PropTypes.arrayOf(PropTypes.shape(albumShape)).isRequired,
   children: PropTypes.func.isRequired,
+  getPath: PropTypes.func.isRequired,
   failed: PropTypes.bool.isRequired,
   fetchAlbums: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  match: PropTypes.shape(matchShape).isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -82,6 +87,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchAlbums: options => dispatch(fetchAlbums(options)),
+  getPath: (currentPath, currentPage, id) =>
+    `${currentPath}/${id}/page/${currentPage}`,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AlbumsContainer);

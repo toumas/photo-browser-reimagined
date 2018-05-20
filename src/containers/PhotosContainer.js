@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
 import {
   fetchPhotos,
@@ -53,23 +52,22 @@ class PhotosContainer extends Component {
     }
   }
 
+  getPath = id =>
+    this.props.getPath(this.props.match.url, this.state.options.page, id);
+
   fetchPhotos = () => {
     this.props.fetchPhotos(this.state.options);
   };
 
-  goToPhoto = id => () => {
-    this.props.goToPhoto(this.props.match.url, this.state.options.page, id);
-  };
-
   render() {
-    const { children, failed, isLoading, photos } = this.props;
+    const { children, failed, isLoading, photos: items } = this.props;
 
     return children({
       failed,
       isLoading,
-      photos,
+      items,
       retry: this.fetchPhotos,
-      handleClick: this.goToPhoto,
+      getPath: this.getPath,
     });
   }
 }
@@ -78,7 +76,7 @@ PhotosContainer.propTypes = {
   children: PropTypes.func.isRequired,
   failed: PropTypes.bool.isRequired,
   fetchPhotos: PropTypes.func.isRequired,
-  goToPhoto: PropTypes.func.isRequired,
+  getPath: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   match: PropTypes.shape(matchShape).isRequired,
   photos: PropTypes.arrayOf(PropTypes.shape(photoShape)).isRequired,
@@ -92,12 +90,11 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchPhotos: options => dispatch(fetchPhotos(options)),
-  goToPhoto: (currentPath, currentPage, id) => {
+  getPath: (currentPath, currentPage, id) => {
     if (currentPath === '/') {
-      dispatch(push(`/page/${currentPage}/photo/${id}`));
-    } else {
-      dispatch(push(`${currentPath}/photo/${id}`));
+      return `/page/${currentPage}/photo/${id}`;
     }
+    return `${currentPath}/photo/${id}`;
   },
 });
 
