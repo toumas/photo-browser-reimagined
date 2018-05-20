@@ -11,16 +11,25 @@ import { albumShape } from '../shapes';
 
 class AlbumsContainer extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (
-      typeof nextProps.match.params.page !== 'undefined' &&
-      nextProps.match.params.page !== prevState.options.page
-    ) {
+    const { page } = nextProps.match.params;
+
+    if (Object.keys(nextProps.match.params).length > 0) {
+      let options = {};
+
+      if (typeof page !== 'undefined') {
+        options = { ...options, page };
+      }
+
       return {
         ...prevState,
-        options: { ...prevState.options, page: nextProps.match.params.page },
+        options: { ...prevState.options, ...options },
       };
     }
-    return null;
+
+    return {
+      ...prevState,
+      options: { ...prevState.options, page: 1 },
+    };
   }
 
   state = {
