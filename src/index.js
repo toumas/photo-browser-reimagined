@@ -9,6 +9,7 @@ import Home from './components/Home';
 import PhotoContainer from './containers/PhotoContainer';
 import Photo from './components/Photo';
 import AlbumsContainer from './containers/AlbumsContainer';
+import AlbumList from './components/AlbumList';
 
 const App = () => (
   <Provider store={store}>
@@ -27,10 +28,25 @@ const App = () => (
         />
         <Route
           exact
+          path="/albums"
+          render={({ match }) => (
+            <AlbumsContainer match={match}>
+              {props => <AlbumList {...props} />}
+            </AlbumsContainer>
+          )}
+        />
+        <Route
+          exact
           path="/albums/page/:page"
           render={({ match }) => (
-            <AlbumsContainer match={match}>{() => null}</AlbumsContainer>
+            <AlbumsContainer match={match}>
+              {props => <AlbumList {...props} />}
+            </AlbumsContainer>
           )}
+        />
+        <Route
+          path="/albums/:id/page/:page"
+          render={({ match }) => <Home match={match} />}
         />
       </Switch>
     </ConnectedRouter>
