@@ -1,18 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import Retry from './Retry';
 import { itemShape } from '../shapes';
 
 const PhotoList = ({ isLoading, failed, items, retry, children, getPath }) => {
   if (isLoading) {
     return 'Loading...';
   } else if (failed) {
-    return (
-      <div>
-        <span>Failed to load content</span>
-        <button onClick={retry}>Retry</button>
-      </div>
-    );
+    return <Retry text="Failed to load content" handleClick={retry} />;
   }
   return (
     <div>
