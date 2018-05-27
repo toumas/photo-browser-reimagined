@@ -6,7 +6,9 @@
   "scripts": {
     "start": "parcel index.html",
     "server": "json-server --watch db.json",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -29,14 +31,20 @@
   "devDependencies": {
     "babel-core": "^6.26.2",
     "babel-eslint": "^8.2.3",
+    "babel-jest": "^23.0.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
+    "jest": "^23.0.0",
     "json-server": "^0.12.2",
     "parcel-bundler": "^1.7.1"
   }
