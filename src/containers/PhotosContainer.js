@@ -31,14 +31,14 @@ class PhotosContainer extends Component {
 
     return {
       ...prevState,
-      options: { ...prevState.options, page: 1 },
+      options: { ...prevState.options, page: '1' },
     };
   }
 
   state = {
     options: {
-      page: 1,
-      limit: 10,
+      page: '1',
+      limit: '10',
     },
   };
 
