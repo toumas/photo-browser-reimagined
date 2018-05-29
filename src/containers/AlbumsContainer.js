@@ -28,14 +28,14 @@ class AlbumsContainer extends Component {
 
     return {
       ...prevState,
-      options: { ...prevState.options, page: 1 },
+      options: { ...prevState.options, page: '1' },
     };
   }
 
   state = {
     options: {
-      page: 1,
-      limit: 10,
+      page: '1',
+      limit: '10',
     },
   };
 
@@ -87,8 +87,12 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchAlbums: options => dispatch(fetchAlbums(options)),
-  getPath: (currentPath, currentPage, id) =>
-    `${currentPath}/${id}/page/${currentPage}`,
+  getPath: (currentPath, currentPage, id) => {
+    if (/^\/albums\/page\/[0-9]+$/.test(currentPath)) {
+      return `/albums/${id}/page/1`;
+    }
+    return `${currentPath}/${id}/page/${currentPage}`;
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AlbumsContainer);
