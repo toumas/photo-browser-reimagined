@@ -9,7 +9,7 @@ import {
 } from '../ducks/photos';
 import { photoShape, matchShape } from '../shapes';
 
-class PhotosContainer extends Component {
+export class PhotosContainer extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     const { page, albumId } = nextProps.match.params;
 
