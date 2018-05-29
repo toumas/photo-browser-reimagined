@@ -11,7 +11,7 @@ import { photoShape, matchShape } from '../shapes';
 
 class PhotosContainer extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { page, id } = nextProps.match.params;
+    const { page, albumId } = nextProps.match.params;
 
     if (Object.keys(nextProps.match.params).length > 0) {
       let options = {};
@@ -19,8 +19,8 @@ class PhotosContainer extends Component {
       if (typeof page !== 'undefined') {
         options = { ...options, page };
       }
-      if (typeof id !== 'undefined') {
-        options = { ...options, albumId: id };
+      if (typeof albumId !== 'undefined') {
+        options = { ...options, albumId };
       }
 
       return {
