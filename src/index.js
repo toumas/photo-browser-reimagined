@@ -53,7 +53,7 @@ const App = () => (
           )}
         />
         <Route
-          path="/albums/:id/page/:page"
+          path="/albums/:albumId/page/:page"
           render={({ match }) => <Home match={match} />}
         />
       </Switch>
