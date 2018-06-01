@@ -14,9 +14,9 @@ describe('PhotosContainer component', () => {
       photos: [],
     };
     const wrapper = shallow(
-      <PhotosContainer {...props}>{() => <div>children</div>}</PhotosContainer>,
+      <PhotosContainer {...props}>{() => <div>child</div>}</PhotosContainer>,
     );
-    expect(wrapper.find('div').text()).toEqual('children');
+    expect(wrapper.find('div')).toHaveLength(1);
   });
 
   it('page changes according to route param', () => {
