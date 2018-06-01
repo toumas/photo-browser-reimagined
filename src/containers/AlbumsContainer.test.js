@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlbumsContainer } from './AlbumsContainer';
+import { AlbumsContainer, getPath } from './AlbumsContainer';
 
 /* eslint-disable no-undef */
 
@@ -22,7 +22,7 @@ function getProps() {
       },
     ],
     fetchAlbums: () => {},
-    getPath: () => {},
+    getPath,
   };
 }
 
@@ -45,5 +45,39 @@ describe('AlbumsContainer component', () => {
       match: { isExact: true, path: '/', url: '/', params: { page: '2' } },
     });
     expect(wrapper.state().options.page).toEqual('2');
+  });
+
+  it('should return proper path for navigation', () => {
+    const wrapper = mount(
+      <AlbumsContainer {...getProps()}>{() => null}</AlbumsContainer>,
+    );
+    expect(
+      wrapper
+        .props()
+        .getPath(
+          wrapper.props().match.url,
+          wrapper.state().options.page,
+          wrapper.props().albums[0].id,
+        ),
+    ).toEqual('/albums/1/page/1');
+    wrapper.setProps({
+      match: {
+        path: '/albums/page/:page',
+        url: '/albums/page/1',
+        isExact: true,
+        params: {
+          page: '1',
+        },
+      },
+    });
+    expect(
+      wrapper
+        .props()
+        .getPath(
+          wrapper.props().match.url,
+          wrapper.state().options.page,
+          wrapper.props().albums[0].id,
+        ),
+    ).toEqual('/albums/1/page/1');
   });
 });
