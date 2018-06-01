@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { fetchPhoto, getPhoto, getFailed, getIsLoading } from '../ducks/photo';
 import { matchShape, photoShapeOptional } from '../shapes';
 
-class PhotoContainer extends Component {
+export class PhotoContainer extends Component {
   componentDidMount() {
     this.props.fetchPhoto(this.props.match.params.id);
   }
