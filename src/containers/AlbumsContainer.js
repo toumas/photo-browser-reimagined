@@ -9,6 +9,13 @@ import {
 } from '../ducks/albums';
 import { albumShape, matchShape } from '../shapes';
 
+export function getPath(currentPath, currentPage, id) {
+  if (/^\/albums\/page\/[0-9]+$/.test(currentPath)) {
+    return `/albums/${id}/page/1`;
+  }
+  return `${currentPath}/${id}/page/${currentPage}`;
+}
+
 export class AlbumsContainer extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     const { page } = nextProps.match.params;
@@ -87,12 +94,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchAlbums: options => dispatch(fetchAlbums(options)),
-  getPath: (currentPath, currentPage, id) => {
-    if (/^\/albums\/page\/[0-9]+$/.test(currentPath)) {
-      return `/albums/${id}/page/1`;
-    }
-    return `${currentPath}/${id}/page/${currentPage}`;
-  },
+  getPath,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AlbumsContainer);
