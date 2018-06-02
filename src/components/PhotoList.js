@@ -13,12 +13,16 @@ const PhotoList = ({ isLoading, failed, items, retry, children, getPath }) => {
   return (
     <div>
       {items.map(item => (
-        <React.Fragment key={item.id}>
+        <div
+          className="thumbnail"
+          style={{ display: 'inline-block' }}
+          key={item.id}
+        >
           <Link to={getPath(item.id)}>
             <img src={item.thumbnailUrl} alt={item.title} />
           </Link>
           {children(item)}
-        </React.Fragment>
+        </div>
       ))}
     </div>
   );
