@@ -3,33 +3,32 @@ import { PhotosContainer } from './PhotosContainer';
 
 /* eslint-disable no-undef */
 
+function getProps() {
+  return {
+    failed: false,
+    fetchPhotos: () => {},
+    getPath: () => {},
+    isLoading: false,
+    match: { isExact: true, path: '/', url: '/', params: {} },
+    photos: [],
+  };
+}
+
 describe('PhotosContainer component', () => {
-  it('renders its children', () => {
-    const props = {
-      failed: false,
-      fetchPhotos: () => {},
-      getPath: () => {},
-      isLoading: false,
-      match: { isExact: true, path: '/', url: '/', params: {} },
-      photos: [],
-    };
+  it('should render children', () => {
     const wrapper = shallow(
-      <PhotosContainer {...props}>{() => <div>child</div>}</PhotosContainer>,
+      <PhotosContainer {...getProps()}>
+        {() => <div>child</div>}
+      </PhotosContainer>,
     );
     expect(wrapper.find('div')).toHaveLength(1);
   });
 
-  it('page changes according to route param', () => {
-    const props = {
-      failed: false,
-      fetchPhotos: () => {},
-      getPath: () => {},
-      isLoading: false,
-      match: { isExact: true, path: '/page/:page', url: '/page/2', params: {} },
-      photos: [],
-    };
+  it('should update page in state according to page route param', () => {
     const wrapper = shallow(
-      <PhotosContainer {...props}>{() => <div>children</div>}</PhotosContainer>,
+      <PhotosContainer {...getProps()}>
+        {() => <div>children</div>}
+      </PhotosContainer>,
     );
     expect(wrapper.state().options.page).toEqual('1');
     wrapper.setProps({
@@ -38,22 +37,11 @@ describe('PhotosContainer component', () => {
     expect(wrapper.state().options.page).toEqual('2');
   });
 
-  it('album id changes according to route param', () => {
-    const props = {
-      failed: false,
-      fetchPhotos: () => {},
-      getPath: () => {},
-      isLoading: false,
-      match: {
-        isExact: true,
-        path: '/',
-        url: '/',
-        params: {},
-      },
-      photos: [],
-    };
+  it('should update album id in state according to route param', () => {
     const wrapper = shallow(
-      <PhotosContainer {...props}>{() => <div>children</div>}</PhotosContainer>,
+      <PhotosContainer {...getProps()}>
+        {() => <div>children</div>}
+      </PhotosContainer>,
     );
     expect(wrapper.state().options.albumId).toEqual(undefined);
     wrapper.setProps({
