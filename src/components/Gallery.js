@@ -7,7 +7,7 @@ import PhotoContainer from '../containers/PhotoContainer';
 import { matchShape } from '../shapes';
 import Photo from './Photo';
 
-const Home = ({ match }) => (
+const Gallery = ({ match }) => (
   <PhotosContainer match={match}>
     {props => (
       <React.Fragment>
@@ -28,8 +28,8 @@ const Home = ({ match }) => (
   </PhotosContainer>
 );
 
-Home.propTypes = {
+Gallery.propTypes = {
   match: PropTypes.shape(matchShape).isRequired,
 };
 
-export default Home;
+export default Gallery;
