@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { Route, Switch } from 'react-router';
 import { ConnectedRouter } from 'react-router-redux';
 import { store, history } from './store';
-import Home from './components/Home';
+import Gallery from './components/Gallery';
 import PhotoContainer from './containers/PhotoContainer';
 import Photo from './components/Photo';
 import AlbumsContainer from './containers/AlbumsContainer';
@@ -15,8 +15,8 @@ const App = () => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/page/:page" render={props => <Home {...props} />} />
+        <Route exact path="/" component={Gallery} />
+        <Route path="/page/:page" render={props => <Gallery {...props} />} />
         <Route
           exact
           path="/photo/:id"
@@ -54,7 +54,7 @@ const App = () => (
         />
         <Route
           path="/albums/:albumId/page/:page"
-          render={({ match }) => <Home match={match} />}
+          render={({ match }) => <Gallery match={match} />}
         />
       </Switch>
     </ConnectedRouter>
