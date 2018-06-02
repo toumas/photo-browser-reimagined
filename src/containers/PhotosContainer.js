@@ -9,6 +9,13 @@ import {
 } from '../ducks/photos';
 import { photoShape, matchShape } from '../shapes';
 
+export function getPath(currentPath, currentPage, id) {
+  if (currentPath === '/') {
+    return `/page/${currentPage}/photo/${id}`;
+  }
+  return `${currentPath}/photo/${id}`;
+}
+
 export class PhotosContainer extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     const { page, albumId } = nextProps.match.params;
@@ -90,12 +97,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchPhotos: options => dispatch(fetchPhotos(options)),
-  getPath: (currentPath, currentPage, id) => {
-    if (currentPath === '/') {
-      return `/page/${currentPage}/photo/${id}`;
-    }
-    return `${currentPath}/photo/${id}`;
-  },
+  getPath,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PhotosContainer);
