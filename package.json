@@ -46,6 +46,7 @@
     "eslint-plugin-react": "^7.7.0",
     "jest": "^23.0.0",
     "json-server": "^0.12.2",
-    "parcel-bundler": "^1.7.1"
+    "parcel-bundler": "^1.8.1",
+    "react-router-enzyme-context": "^1.2.0"
   }
 }
