@@ -8,16 +8,16 @@ import {
   getThumbnails,
 } from './photos';
 
-const LOADING = 'APP/ALBUMS/LOADING';
-const SUCCESS = 'APP/ALBUMS/SUCCESS';
-const FAIL = 'APP/ALBUMS/FAILED';
+export const LOAD = 'app/albums/LOAD';
+export const SUCCESS = 'app/albums/SUCCESS';
+export const FAIL = 'app/albums/FAILED';
 
 export default function reducer(
   state = { failed: false, isLoading: false, items: {} },
   action = {},
 ) {
   switch (action.type) {
-    case LOADING:
+    case LOAD:
       return { ...state, failed: false, isLoading: action.isLoading };
     case SUCCESS:
       return { ...state, isLoading: action.isLoading, items: action.items };
@@ -44,7 +44,7 @@ export const getAlbums = state => {
   );
 };
 
-export const loading = () => ({ type: LOADING, isLoading: true });
+export const loading = () => ({ type: LOAD, isLoading: true });
 
 export const success = items => ({ type: SUCCESS, isLoading: false, items });
 
