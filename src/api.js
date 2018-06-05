@@ -1,6 +1,7 @@
+import 'cross-fetch/polyfill';
+
+/* global fetch */
 const base = 'http://localhost:3000';
-// eslint-disable-next-line no-undef
-const { fetch } = window;
 
 const methods = [
   'page',
