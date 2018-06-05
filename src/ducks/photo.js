@@ -2,16 +2,16 @@ import { normalize } from 'normalizr';
 import { getPhoto as apiGetPhoto } from '../api';
 import { photoWithAlbum } from '../schemas';
 
-const LOADING = 'APP/PHOTO/LOADING';
-const SUCCESS = 'APP/PHOTO/SUCCESS';
-const FAIL = 'APP/PHOTO/FAIL';
+export const LOAD = 'app/photo/LOAD';
+export const SUCCESS = 'app/photo/SUCCESS';
+export const FAIL = 'app/photo/FAIL';
 
 export default function reducer(
   state = { failed: false, isLoading: false, photo: {} },
   action = {},
 ) {
   switch (action.type) {
-    case LOADING:
+    case LOAD:
       return { ...state, failed: false, isLoading: action.isLoading };
     case SUCCESS:
       return { ...state, isLoading: action.isLoading, photo: action.photo };
@@ -26,7 +26,7 @@ export const getPhoto = state => state.photo.photo;
 export const getFailed = state => state.photo.failed;
 export const getIsLoading = state => state.photo.isLoading;
 
-export const loading = () => ({ type: LOADING, isLoading: true });
+export const loading = () => ({ type: LOAD, isLoading: true });
 
 export const success = photo => ({ type: SUCCESS, isLoading: false, photo });
 
