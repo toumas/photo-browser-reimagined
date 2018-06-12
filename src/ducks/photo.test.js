@@ -1,7 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
-import {
+import reducer, {
   loading,
   success,
   fail,
@@ -94,6 +94,39 @@ describe('async actions', () => {
 
     return store.dispatch(fetchPhoto(1)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+});
+
+describe('reducer', () => {
+  it('should return initial state', () => {
+    expect(reducer(undefined, {})).toEqual({
+      failed: false,
+      isLoading: false,
+      photo: {},
+    });
+  });
+
+  it('should handle LOAD', () => {
+    expect(reducer({}, { type: LOAD, isLoading: true })).toEqual({
+      isLoading: true,
+      failed: false,
+    });
+  });
+
+  it('should handle SUCCESS', () => {
+    expect(
+      reducer({}, { type: SUCCESS, isLoading: false, photo: normalizedPhoto }),
+    ).toEqual({
+      isLoading: false,
+      photo: normalizedPhoto,
+    });
+  });
+
+  it('should handle FAIL', () => {
+    expect(reducer({}, { type: FAIL, isLoading: false })).toEqual({
+      isLoading: false,
+      failed: true,
     });
   });
 });
