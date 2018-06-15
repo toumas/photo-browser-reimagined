@@ -127,8 +127,8 @@ describe('async actions', () => {
     const expectedActions = [
       { type: LOAD, isLoading: true },
       { type: PHOTOS_LOAD, isLoading: true },
-      { type: PHOTOS_SUCCESS, isLoading: false, items: normalizedPhotos },
       { type: SUCCESS, isLoading: false, items: normalizedAlbums },
+      { type: PHOTOS_SUCCESS, isLoading: false, items: normalizedPhotos },
     ];
 
     return store.dispatch(fetchAlbums({ page: '1', limit: '2' })).then(() => {

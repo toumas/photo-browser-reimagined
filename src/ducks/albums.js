@@ -10,7 +10,7 @@ import {
 
 export const LOAD = 'app/albums/LOAD';
 export const SUCCESS = 'app/albums/SUCCESS';
-export const FAIL = 'app/albums/FAILED';
+export const FAIL = 'app/albums/FAIL';
 
 export default function reducer(
   state = { failed: false, isLoading: false, items: {} },
@@ -31,9 +31,6 @@ export default function reducer(
 export const getFailed = state => state.albums.failed;
 export const getIsLoading = state => state.albums.isLoading;
 export const getAlbums = state => {
-  if (getIsLoading(state)) {
-    return {};
-  }
   const thumbnails = getThumbnails(state);
   return Object.entries(thumbnails).reduce(
     (acc, entry) => ({
@@ -61,12 +58,12 @@ export const fetchAlbums = options => async dispatch => {
         normalizedData.result.map(albumId => getPhotos({ albumId, limit: 1 })),
       );
       const normalizedPhotos = normalize(photos, [photoList]);
+      dispatch(success(normalizedData.entities.albums));
       dispatch(photosSuccess(normalizedPhotos.entities.photos));
     } catch (err) {
       dispatch(photosFail());
+      throw new Error('Failed to load thumbnails');
     }
-
-    dispatch(success(normalizedData.entities.albums));
   } catch (err) {
     dispatch(fail());
   }
