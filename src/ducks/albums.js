@@ -14,7 +14,7 @@ export const FAIL = 'app/albums/FAIL';
 
 export default function reducer(
   state = { failed: false, isLoading: false, items: {} },
-  action = {},
+  action,
 ) {
   switch (action.type) {
     case LOAD:
@@ -28,17 +28,20 @@ export default function reducer(
   }
 }
 
-export const getFailed = state => state.albums.failed;
-export const getIsLoading = state => state.albums.isLoading;
-export const getAlbums = state => {
-  const thumbnails = getThumbnails(state);
-  return Object.entries(thumbnails).reduce(
+export const applyThumbnailUrls = (thumbnailsUrls, items) =>
+  Object.entries(thumbnailsUrls).reduce(
     (acc, entry) => ({
       ...acc,
-      [entry[0]]: { ...state.albums.items[entry[0]], thumbnailUrl: entry[1] },
+      [entry[0]]: { ...items[entry[0]], thumbnailUrl: entry[1] },
     }),
     {},
   );
+
+export const getFailed = state => state.albums.failed;
+export const getIsLoading = state => state.albums.isLoading;
+export const getAlbums = state => {
+  const thumbnailsUrls = getThumbnails(state);
+  return applyThumbnailUrls(thumbnailsUrls, state.albums.items);
 };
 
 export const loading = () => ({ type: LOAD, isLoading: true });
