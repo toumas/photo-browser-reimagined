@@ -9,8 +9,14 @@ import reducer, {
   LOAD,
   SUCCESS,
   FAIL,
+  getAlbums,
+  applyThumbnailUrls,
 } from './albums';
-import { LOAD as PHOTOS_LOAD, SUCCESS as PHOTOS_SUCCESS } from './photos';
+import {
+  LOAD as PHOTOS_LOAD,
+  SUCCESS as PHOTOS_SUCCESS,
+  FAIL as PHOTOS_FAIL,
+} from './photos';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -78,6 +84,11 @@ const thumbnail2 = [
   },
 ];
 
+const thumbnailsUrls = {
+  '1': 'http://placehold.it/150/92c952',
+  '2': 'http://placehold.it/150/8e973b',
+};
+
 /* eslint-disable no-undef */
 
 describe('action creators', () => {
@@ -123,7 +134,9 @@ describe('async actions', () => {
       headers: { 'content-type': 'application/json' },
     });
 
-    const store = mockStore({ albums: {} });
+    const store = mockStore({
+      albums: { failed: false, isLoading: false, items: {} },
+    });
     const expectedActions = [
       { type: LOAD, isLoading: true },
       { type: PHOTOS_LOAD, isLoading: true },
@@ -141,7 +154,9 @@ describe('async actions', () => {
       throws: new Error(),
     });
 
-    const store = mockStore({ albums: {} });
+    const store = mockStore({
+      albums: { failed: false, isLoading: false, items: {} },
+    });
     const expectedActions = [
       { type: LOAD, isLoading: true },
       { type: FAIL, isLoading: false },
@@ -150,6 +165,43 @@ describe('async actions', () => {
     return store.dispatch(fetchAlbums({ page: '1', limit: '2' })).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
+  });
+});
+
+it('should create fail action when fetching of thumbnails failed', () => {
+  fetchMock.getOnce('http://localhost:3000/albums?_page=1&_limit=2&', {
+    body: { ...albums },
+    headers: { 'content-type': 'application/json' },
+  });
+
+  fetchMock.getOnce('http://localhost:3000/photos?albumId=1&_limit=1&', {
+    throws: new Error(),
+  });
+
+  const store = mockStore({
+    albums: { failed: false, isLoading: false, items: {} },
+  });
+  const expectedActions = [
+    { type: LOAD, isLoading: true },
+    { type: PHOTOS_LOAD, isLoading: true },
+    { type: PHOTOS_FAIL, isLoading: false },
+    { type: FAIL, isLoading: false },
+  ];
+
+  return store.dispatch(fetchAlbums({ page: '1', limit: '2' })).then(() => {
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+});
+
+describe('selectors', () => {
+  it('should select albums', () => {
+    const store = mockStore({
+      photos: { items: normalizedPhotos },
+      albums: { failed: false, isLoading: false, items: normalizedAlbums },
+    });
+    expect(getAlbums(store.getState())).toEqual(
+      applyThumbnailUrls(thumbnailsUrls, store.getState().albums.items),
+    );
   });
 });
 
