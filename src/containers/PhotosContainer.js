@@ -9,7 +9,7 @@ import {
 } from '../ducks/photos';
 import { photoShape, matchShape } from '../shapes';
 
-export function getPath(currentPath, currentPage, id) {
+function getPath(currentPath, currentPage, id) {
   if (currentPath === '/') {
     return `/page/${currentPage}/photo/${id}`;
   }
@@ -50,17 +50,16 @@ export class PhotosContainer extends Component {
   };
 
   componentDidMount() {
-    this.props.fetchPhotos(this.state.options);
+    this.fetchPhotos();
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.options.page !== prevState.options.page) {
-      this.props.fetchPhotos(this.state.options);
+      this.fetchPhotos();
     }
   }
 
-  getPath = id =>
-    this.props.getPath(this.props.match.url, this.state.options.page, id);
+  getPath = id => getPath(this.props.match.url, this.state.options.page, id);
 
   fetchPhotos = () => {
     this.props.fetchPhotos(this.state.options);
@@ -83,21 +82,22 @@ PhotosContainer.propTypes = {
   children: PropTypes.func.isRequired,
   failed: PropTypes.bool.isRequired,
   fetchPhotos: PropTypes.func.isRequired,
-  getPath: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   match: PropTypes.shape(matchShape).isRequired,
   photos: PropTypes.arrayOf(PropTypes.shape(photoShape)).isRequired,
 };
 
-const mapStateToProps = state => ({
+export const mapStateToProps = state => ({
   failed: getFailed(state),
   isLoading: getIsLoading(state),
   photos: Object.values(getPhotos(state)),
 });
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
   fetchPhotos: options => dispatch(fetchPhotos(options)),
-  getPath,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PhotosContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PhotosContainer);

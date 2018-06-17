@@ -1,13 +1,27 @@
 import React from 'react';
-import { PhotosContainer, getPath } from './PhotosContainer';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import {
+  PhotosContainer,
+  mapDispatchToProps,
+  mapStateToProps,
+} from './PhotosContainer';
+import {
+  fetchPhotos,
+  getFailed,
+  getIsLoading,
+  getPhotos,
+} from '../ducks/photos';
+
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
 /* eslint-disable no-undef */
 
 function getProps() {
   return {
     failed: false,
-    fetchPhotos: () => {},
-    getPath,
+    fetchPhotos: jest.fn(),
     isLoading: false,
     match: { isExact: true, path: '/', url: '/', params: {} },
     photos: [
@@ -50,6 +64,15 @@ describe('PhotosContainer component', () => {
       match: { isExact: true, path: '/', url: '/', params: { page: '2' } },
     });
     expect(wrapper.state().options.page).toEqual('2');
+    wrapper.setProps({
+      match: {
+        isExact: true,
+        path: '/',
+        url: '/',
+        params: { page: undefined },
+      },
+    });
+    expect(wrapper.state().options.page).toEqual('2');
   });
 
   it('should update album id in state according to route param', () => {
@@ -74,15 +97,7 @@ describe('PhotosContainer component', () => {
     const wrapper = mount(
       <PhotosContainer {...getProps()}>{() => null}</PhotosContainer>,
     );
-    expect(
-      wrapper
-        .props()
-        .getPath(
-          wrapper.props().match.url,
-          wrapper.state().options.page,
-          wrapper.props().photos[0].id,
-        ),
-    ).toEqual('/page/1/photo/1');
+    expect(wrapper.instance().getPath(1)).toEqual('/page/1/photo/1');
     wrapper.setProps({
       match: {
         path: '/page/:page',
@@ -93,14 +108,52 @@ describe('PhotosContainer component', () => {
         },
       },
     });
+    expect(wrapper.instance().getPath(2)).toEqual('/page/1/photo/2');
+  });
+
+  it('should begin fetching photos on mount and on update', () => {
+    const wrapper = shallow(
+      <PhotosContainer {...getProps()}>{() => null}</PhotosContainer>,
+    );
+    expect(wrapper.instance().props.fetchPhotos).toHaveBeenCalledTimes(1);
+    wrapper.setProps({
+      match: {
+        path: '/page/:page',
+        url: '/page/2',
+        isExact: false,
+        params: {
+          page: '2',
+        },
+      },
+    });
+    expect(wrapper.instance().props.fetchPhotos).toHaveBeenCalledTimes(2);
+  });
+
+  it('should map dispatch to props', () => {
+    const store = mockStore({
+      photos: { failed: false, isLoading: false, photos: {} },
+    });
     expect(
-      wrapper
-        .props()
-        .getPath(
-          wrapper.props().match.url,
-          wrapper.state().options.page,
-          wrapper.props().photos[1].id,
-        ),
-    ).toEqual('/page/1/photo/2');
+      mapDispatchToProps(store.dispatch).fetchPhotos({
+        page: '1',
+        limit: '10',
+      }),
+    ).toEqual(
+      fetchPhotos({
+        page: '1',
+        limit: '10',
+      })(store.dispatch),
+    );
+  });
+
+  it('should map state to props', () => {
+    const store = mockStore({
+      photos: { failed: false, isLoading: false, items: {} },
+    });
+    expect(mapStateToProps(store.getState())).toEqual({
+      failed: getFailed(store.getState()),
+      isLoading: getIsLoading(store.getState()),
+      photos: Object.values(getPhotos(store.getState())),
+    });
   });
 });
