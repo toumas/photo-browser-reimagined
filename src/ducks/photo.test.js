@@ -9,6 +9,9 @@ import reducer, {
   SUCCESS,
   FAIL,
   fetchPhoto,
+  getPhoto,
+  getFailed,
+  getIsLoading,
 } from './photo';
 
 const middlewares = [thunk];
@@ -70,7 +73,9 @@ describe('async actions', () => {
       headers: { 'content-type': 'application/json' },
     });
 
-    const store = mockStore({ photo: {} });
+    const store = mockStore({
+      photo: { failed: false, isLoading: false, photo: {} },
+    });
     const expectedActions = [
       { type: LOAD, isLoading: true },
       { type: SUCCESS, isLoading: false, photo: normalizedPhoto },
@@ -86,7 +91,9 @@ describe('async actions', () => {
       throws: new Error(),
     });
 
-    const store = mockStore({ photo: {} });
+    const store = mockStore({
+      photo: { failed: false, isLoading: false, photo: {} },
+    });
     const expectedActions = [
       { type: LOAD, isLoading: true },
       { type: FAIL, isLoading: false },
@@ -95,6 +102,29 @@ describe('async actions', () => {
     return store.dispatch(fetchPhoto(1)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
+  });
+});
+
+describe('selectors', () => {
+  it('should select photo', () => {
+    const store = mockStore({
+      photo: { failed: false, isLoading: false, photo: normalizedPhoto },
+    });
+    expect(getPhoto(store.getState())).toEqual(normalizedPhoto);
+  });
+
+  it('should select failed', () => {
+    const store = mockStore({
+      photo: { failed: true, isLoading: false, photo: normalizedPhoto },
+    });
+    expect(getFailed(store.getState())).toEqual(true);
+  });
+
+  it('should select isLoading', () => {
+    const store = mockStore({
+      photo: { failed: false, isLoading: true, photo: normalizedPhoto },
+    });
+    expect(getIsLoading(store.getState())).toEqual(true);
   });
 });
 
