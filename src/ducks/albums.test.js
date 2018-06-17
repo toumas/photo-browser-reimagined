@@ -180,6 +180,10 @@ it('should create fail action when fetching of thumbnails failed', () => {
     throws: new Error(),
   });
 
+  fetchMock.getOnce('http://localhost:3000/photos?albumId=2&_limit=1&', {
+    throws: new Error(),
+  });
+
   const store = mockStore({
     albums: { failed: false, isLoading: false, items: {} },
   });
