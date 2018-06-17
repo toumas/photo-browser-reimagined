@@ -11,6 +11,8 @@ import reducer, {
   FAIL,
   getAlbums,
   applyThumbnailUrls,
+  getFailed,
+  getIsLoading,
 } from './albums';
 import {
   LOAD as PHOTOS_LOAD,
@@ -194,6 +196,20 @@ it('should create fail action when fetching of thumbnails failed', () => {
 });
 
 describe('selectors', () => {
+  it('should select failed', () => {
+    const store = mockStore({
+      albums: { failed: true, isLoading: false, items: {} },
+    });
+    expect(getFailed(store.getState())).toEqual(true);
+  });
+
+  it('should select isLoading', () => {
+    const store = mockStore({
+      albums: { failed: false, isLoading: true, items: {} },
+    });
+    expect(getIsLoading(store.getState())).toEqual(true);
+  });
+
   it('should select albums', () => {
     const store = mockStore({
       photos: { items: normalizedPhotos },
