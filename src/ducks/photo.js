@@ -8,7 +8,7 @@ export const FAIL = 'app/photo/FAIL';
 
 export default function reducer(
   state = { failed: false, isLoading: false, photo: {} },
-  action = {},
+  action,
 ) {
   switch (action.type) {
     case LOAD:
