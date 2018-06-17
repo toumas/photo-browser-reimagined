@@ -9,6 +9,10 @@ import reducer, {
   LOAD,
   SUCCESS,
   FAIL,
+  getFailed,
+  getIsLoading,
+  getPhotos,
+  getThumbnails,
 } from './photos';
 
 const middlewares = [thunk];
@@ -48,6 +52,10 @@ const normalizedPhotos = {
   },
 };
 
+const thumbnailsUrls = {
+  '1': 'http://placehold.it/150/92c952',
+};
+
 /* eslint-disable no-undef */
 
 describe('action creators', () => {
@@ -83,7 +91,9 @@ describe('async actions', () => {
       headers: { 'content-type': 'application/json' },
     });
 
-    const store = mockStore({ photos: {} });
+    const store = mockStore({
+      photos: { failed: false, isLoading: false, items: {} },
+    });
     const expectedActions = [
       { type: LOAD, isLoading: true },
       { type: SUCCESS, isLoading: false, items: normalizedPhotos },
@@ -99,7 +109,9 @@ describe('async actions', () => {
       throws: new Error(),
     });
 
-    const store = mockStore({ photos: {} });
+    const store = mockStore({
+      photos: { failed: false, isLoading: false, items: {} },
+    });
     const expectedActions = [
       { type: LOAD, isLoading: true },
       { type: FAIL, isLoading: false },
@@ -108,6 +120,35 @@ describe('async actions', () => {
     return store.dispatch(fetchPhotos({ page: '1', limit: '2' })).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
+  });
+});
+
+describe('selectors', () => {
+  it('should select photos', () => {
+    const store = mockStore({
+      photos: { failed: true, isLoading: false, items: normalizedPhotos },
+    });
+    expect(getPhotos(store.getState())).toEqual(normalizedPhotos);
+  });
+  it('should select failed', () => {
+    const store = mockStore({
+      photos: { failed: true, isLoading: false, items: {} },
+    });
+    expect(getFailed(store.getState())).toEqual(true);
+  });
+
+  it('should select isLoading', () => {
+    const store = mockStore({
+      photos: { failed: false, isLoading: true, items: {} },
+    });
+    expect(getIsLoading(store.getState())).toEqual(true);
+  });
+
+  it('should select thumbnails', () => {
+    const store = mockStore({
+      photos: { failed: false, isLoading: false, items: normalizedPhotos },
+    });
+    expect(getThumbnails(store.getState())).toEqual(thumbnailsUrls);
   });
 });
 
