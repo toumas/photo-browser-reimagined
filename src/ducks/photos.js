@@ -8,7 +8,7 @@ export const FAIL = 'app/photos/FAIL';
 
 export default function reducer(
   state = { failed: false, isLoading: false, items: {} },
-  action = {},
+  action,
 ) {
   switch (action.type) {
     case LOAD:
@@ -27,7 +27,10 @@ export const getFailed = state => state.photos.failed;
 export const getIsLoading = state => state.photos.isLoading;
 export const getThumbnails = state =>
   Object.values(getPhotos(state)).reduce(
-    (acc, photo) => ({ ...acc, [photo.albumId]: photo.thumbnailUrl }),
+    (acc, photo) =>
+      acc[photo.albumId]
+        ? { ...acc }
+        : { ...acc, [photo.albumId]: photo.thumbnailUrl },
     {},
   );
 
