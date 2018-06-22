@@ -9,7 +9,7 @@ import {
 } from '../ducks/albums';
 import { albumShape, matchShape } from '../shapes';
 
-export function getPath(currentPath, currentPage, id) {
+function getPath(currentPath, currentPage, id) {
   if (/^\/albums\/page\/[0-9]+$/.test(currentPath)) {
     return `/albums/${id}/page/1`;
   }
@@ -47,17 +47,16 @@ export class AlbumsContainer extends Component {
   };
 
   componentDidMount() {
-    this.props.fetchAlbums(this.state.options);
+    this.fetchAlbums();
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.options.page !== prevState.options.page) {
-      this.props.fetchAlbums(this.state.options);
+      this.fetchAlbums();
     }
   }
 
-  getPath = id =>
-    this.props.getPath(this.props.match.url, this.state.options.page, id);
+  getPath = id => getPath(this.props.match.url, this.state.options.page, id);
 
   fetchAlbums = () => {
     this.props.fetchAlbums(this.state.options);
@@ -79,22 +78,23 @@ export class AlbumsContainer extends Component {
 AlbumsContainer.propTypes = {
   albums: PropTypes.arrayOf(PropTypes.shape(albumShape)).isRequired,
   children: PropTypes.func.isRequired,
-  getPath: PropTypes.func.isRequired,
   failed: PropTypes.bool.isRequired,
   fetchAlbums: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   match: PropTypes.shape(matchShape).isRequired,
 };
 
-const mapStateToProps = state => ({
+export const mapStateToProps = state => ({
   failed: getFailed(state),
   isLoading: getIsLoading(state),
   albums: Object.values(getAlbums(state)),
 });
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
   fetchAlbums: options => dispatch(fetchAlbums(options)),
-  getPath,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AlbumsContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AlbumsContainer);
