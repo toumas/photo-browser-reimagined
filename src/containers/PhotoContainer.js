@@ -22,13 +22,13 @@ export class PhotoContainer extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+export const mapStateToProps = state => ({
   failed: getFailed(state),
   isLoading: getIsLoading(state),
   photo: getPhoto(state),
 });
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
   fetchPhoto: id => dispatch(fetchPhoto(id)),
 });
 
@@ -41,4 +41,7 @@ PhotoContainer.propTypes = {
   photo: PropTypes.shape(photoShapeOptional).isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PhotoContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PhotoContainer);

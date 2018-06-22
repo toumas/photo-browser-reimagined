@@ -150,10 +150,11 @@ describe('PhotosContainer component', () => {
     const store = mockStore({
       photos: { failed: false, isLoading: false, items: {} },
     });
-    expect(mapStateToProps(store.getState())).toEqual({
-      failed: getFailed(store.getState()),
-      isLoading: getIsLoading(store.getState()),
-      photos: Object.values(getPhotos(store.getState())),
+    const state = store.getState();
+    expect(mapStateToProps(state)).toEqual({
+      failed: getFailed(state),
+      isLoading: getIsLoading(state),
+      photos: Object.values(getPhotos(state)),
     });
   });
 });
