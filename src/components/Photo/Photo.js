@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Retry from './Retry';
-import { photoShapeOptional } from '../shapes';
+import Retry from '../UI/Retry';
+import { photoShapeOptional } from '../../shapes';
 
 const Photo = ({ failed, isLoading, photo, retry }) => {
   if (isLoading) {

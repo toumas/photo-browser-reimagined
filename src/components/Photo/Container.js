@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { fetchPhoto, getPhoto, getFailed, getIsLoading } from '../ducks/photo';
-import { matchShape, photoShapeOptional } from '../shapes';
+import { fetchPhoto, getPhoto, getFailed, getIsLoading } from './Duck';
+import { matchShape, photoShapeOptional } from '../../shapes';
 
 export class PhotoContainer extends Component {
   componentDidMount() {

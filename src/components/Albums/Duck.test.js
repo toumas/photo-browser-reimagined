@@ -13,12 +13,12 @@ import reducer, {
   applyThumbnailUrls,
   getFailed,
   getIsLoading,
-} from './albums';
+} from './Duck';
 import {
   LOAD as PHOTOS_LOAD,
   SUCCESS as PHOTOS_SUCCESS,
   FAIL as PHOTOS_FAIL,
-} from './photos';
+} from '../Photos/Duck';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);

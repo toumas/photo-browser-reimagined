@@ -8,5 +8,6 @@ module.exports = {
       'error',
       { components: ['Link'], specialLink: ['to'] },
     ],
+    'import/no-named-as-default': 0,
   },
 };

@@ -5,55 +5,37 @@ import reducer, {
   loading,
   success,
   fail,
-  fetchPhotos,
   LOAD,
   SUCCESS,
   FAIL,
+  fetchPhoto,
+  getPhoto,
   getFailed,
   getIsLoading,
-  getPhotos,
-  getThumbnails,
-} from './photos';
+} from './Duck';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-const photos = [
-  {
-    albumId: 1,
+const photo = {
+  albumId: 1,
+  id: 1,
+  title: 'accusamus beatae ad facilis cum similique qui sunt',
+  url: 'http://placehold.it/600/92c952',
+  thumbnailUrl: 'http://placehold.it/150/92c952',
+  album: {
+    userId: 1,
     id: 1,
-    title: 'accusamus beatae ad facilis cum similique qui sunt',
-    url: 'http://placehold.it/600/92c952',
-    thumbnailUrl: 'http://placehold.it/150/92c952',
-  },
-  {
-    albumId: 1,
-    id: 2,
-    title: 'reprehenderit est deserunt velit ipsam',
-    url: 'http://placehold.it/600/771796',
-    thumbnailUrl: 'http://placehold.it/150/771796',
-  },
-];
-
-const normalizedPhotos = {
-  '1': {
-    albumId: 1,
-    id: 1,
-    title: 'accusamus beatae ad facilis cum similique qui sunt',
-    url: 'http://placehold.it/600/92c952',
-    thumbnailUrl: 'http://placehold.it/150/92c952',
-  },
-  '2': {
-    albumId: 1,
-    id: 2,
-    title: 'reprehenderit est deserunt velit ipsam',
-    url: 'http://placehold.it/600/771796',
-    thumbnailUrl: 'http://placehold.it/150/771796',
+    title: 'quidem molestiae enim',
   },
 };
-
-const thumbnailsUrls = {
-  '1': 'http://placehold.it/150/92c952',
+const normalizedPhoto = {
+  albumId: 1,
+  id: 1,
+  title: 'accusamus beatae ad facilis cum similique qui sunt',
+  url: 'http://placehold.it/600/92c952',
+  thumbnailUrl: 'http://placehold.it/150/92c952',
+  album: 1,
 };
 
 /* eslint-disable no-undef */
@@ -64,18 +46,18 @@ describe('action creators', () => {
     expect(loading()).toEqual(action);
   });
 
-  it('should create fail action', () => {
-    const action = { type: FAIL, isLoading: false };
-    expect(fail()).toEqual(action);
-  });
-
   it('should create success action', () => {
     const action = {
       type: SUCCESS,
       isLoading: false,
-      items: normalizedPhotos,
+      photo: normalizedPhoto,
     };
-    expect(success(normalizedPhotos)).toEqual(action);
+    expect(success(normalizedPhoto)).toEqual(action);
+  });
+
+  it('should create fail action', () => {
+    const action = { type: FAIL, isLoading: false };
+    expect(fail()).toEqual(action);
   });
 });
 
@@ -86,69 +68,63 @@ describe('async actions', () => {
   });
 
   it('should create success action when fetch was successful', () => {
-    fetchMock.getOnce('http://localhost:3000/photos?_page=1&_limit=2&', {
-      body: { ...photos },
+    fetchMock.getOnce('http://localhost:3000/photos/1?_expand=album&', {
+      body: { ...photo },
       headers: { 'content-type': 'application/json' },
     });
 
     const store = mockStore({
-      photos: { failed: false, isLoading: false, items: {} },
+      photo: { failed: false, isLoading: false, photo: {} },
     });
     const expectedActions = [
       { type: LOAD, isLoading: true },
-      { type: SUCCESS, isLoading: false, items: normalizedPhotos },
+      { type: SUCCESS, isLoading: false, photo: normalizedPhoto },
     ];
 
-    return store.dispatch(fetchPhotos({ page: '1', limit: '2' })).then(() => {
+    return store.dispatch(fetchPhoto(1)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
 
   it('should create fail action when fetch failed', () => {
-    fetchMock.getOnce('http://localhost:3000/photos?_page=1&_limit=2&', {
+    fetchMock.getOnce('http://localhost:3000/photos/1?_expand=album&', {
       throws: new Error(),
     });
 
     const store = mockStore({
-      photos: { failed: false, isLoading: false, items: {} },
+      photo: { failed: false, isLoading: false, photo: {} },
     });
     const expectedActions = [
       { type: LOAD, isLoading: true },
       { type: FAIL, isLoading: false },
     ];
 
-    return store.dispatch(fetchPhotos({ page: '1', limit: '2' })).then(() => {
+    return store.dispatch(fetchPhoto(1)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
 });
 
 describe('selectors', () => {
-  it('should select photos', () => {
+  it('should select photo', () => {
     const store = mockStore({
-      photos: { failed: true, isLoading: false, items: normalizedPhotos },
+      photo: { failed: false, isLoading: false, photo: normalizedPhoto },
     });
-    expect(getPhotos(store.getState())).toEqual(normalizedPhotos);
+    expect(getPhoto(store.getState())).toEqual(normalizedPhoto);
   });
+
   it('should select failed', () => {
     const store = mockStore({
-      photos: { failed: true, isLoading: false, items: {} },
+      photo: { failed: true, isLoading: false, photo: normalizedPhoto },
     });
     expect(getFailed(store.getState())).toEqual(true);
   });
 
   it('should select isLoading', () => {
     const store = mockStore({
-      photos: { failed: false, isLoading: true, items: {} },
+      photo: { failed: false, isLoading: true, photo: normalizedPhoto },
     });
     expect(getIsLoading(store.getState())).toEqual(true);
-  });
-
-  it('should select thumbnails', () => {
-    const store = mockStore({
-      photos: { failed: false, isLoading: false, items: normalizedPhotos },
-    });
-    expect(getThumbnails(store.getState())).toEqual(thumbnailsUrls);
   });
 });
 
@@ -157,7 +133,7 @@ describe('reducer', () => {
     expect(reducer(undefined, {})).toEqual({
       failed: false,
       isLoading: false,
-      items: {},
+      photo: {},
     });
   });
 
@@ -170,10 +146,10 @@ describe('reducer', () => {
 
   it('should handle SUCCESS', () => {
     expect(
-      reducer({}, { type: SUCCESS, isLoading: false, items: normalizedPhotos }),
+      reducer({}, { type: SUCCESS, isLoading: false, photo: normalizedPhoto }),
     ).toEqual({
       isLoading: false,
-      items: normalizedPhotos,
+      photo: normalizedPhoto,
     });
   });
 

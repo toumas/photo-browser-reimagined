@@ -1,6 +1,6 @@
 import { normalize } from 'normalizr';
-import { getPhotos as apiGetPhotos } from '../api';
-import { photoList } from '../schemas';
+import { getPhotos as apiGetPhotos } from '../../api';
+import { photoList } from '../../schemas';
 
 export const LOAD = 'app/photos/LOAD';
 export const SUCCESS = 'app/photos/SUCCESS';

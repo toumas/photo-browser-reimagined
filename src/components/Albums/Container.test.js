@@ -6,13 +6,8 @@ import {
   getPath,
   mapDispatchToProps,
   mapStateToProps,
-} from './AlbumsContainer';
-import {
-  getFailed,
-  getIsLoading,
-  getAlbums,
-  fetchAlbums,
-} from '../ducks/albums';
+} from './Container';
+import { getFailed, getIsLoading, getAlbums, fetchAlbums } from './Duck';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);

@@ -1,12 +1,12 @@
 import { normalize } from 'normalizr';
-import { getAlbums as apiGetAlbums, getPhotos } from '../api';
-import { albumList, photoList } from '../schemas';
+import { getAlbums as apiGetAlbums, getPhotos } from '../../api';
+import { albumList, photoList } from '../../schemas';
 import {
   success as photosSuccess,
   loading as photosLoading,
   fail as photosFail,
   getThumbnails,
-} from './photos';
+} from '../Photos/Duck';
 
 export const LOAD = 'app/albums/LOAD';
 export const SUCCESS = 'app/albums/SUCCESS';

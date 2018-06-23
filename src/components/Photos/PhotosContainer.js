@@ -1,30 +1,28 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  fetchAlbums,
-  getFailed,
-  getIsLoading,
-  getAlbums,
-} from '../ducks/albums';
-import { albumShape, matchShape } from '../shapes';
+import { fetchPhotos, getFailed, getIsLoading, getPhotos } from './Duck';
+import { photoShape, matchShape } from '../../shapes';
 
 function getPath(currentPath, currentPage, id) {
-  if (/^\/albums\/page\/[0-9]+$/.test(currentPath)) {
-    return `/albums/${id}/page/1`;
+  if (currentPath === '/') {
+    return `/page/${currentPage}/photo/${id}`;
   }
-  return `${currentPath}/${id}/page/${currentPage}`;
+  return `${currentPath}/photo/${id}`;
 }
 
-export class AlbumsContainer extends Component {
+export class PhotosContainer extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { page } = nextProps.match.params;
+    const { page, albumId } = nextProps.match.params;
 
     if (Object.keys(nextProps.match.params).length > 0) {
       let options = {};
 
       if (typeof page !== 'undefined') {
         options = { ...options, page };
+      }
+      if (typeof albumId !== 'undefined') {
+        options = { ...options, albumId };
       }
 
       return {
@@ -47,54 +45,54 @@ export class AlbumsContainer extends Component {
   };
 
   componentDidMount() {
-    this.fetchAlbums();
+    this.fetchPhotos();
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.options.page !== prevState.options.page) {
-      this.fetchAlbums();
+      this.fetchPhotos();
     }
   }
 
   getPath = id => getPath(this.props.match.url, this.state.options.page, id);
 
-  fetchAlbums = () => {
-    this.props.fetchAlbums(this.state.options);
+  fetchPhotos = () => {
+    this.props.fetchPhotos(this.state.options);
   };
 
   render() {
-    const { albums: items, children, failed, isLoading } = this.props;
+    const { children, failed, isLoading, photos: items } = this.props;
 
     return children({
-      items,
       failed,
       isLoading,
-      retry: this.fetchAlbums,
+      items,
+      retry: this.fetchPhotos,
       getPath: this.getPath,
     });
   }
 }
 
-AlbumsContainer.propTypes = {
-  albums: PropTypes.arrayOf(PropTypes.shape(albumShape)).isRequired,
+PhotosContainer.propTypes = {
   children: PropTypes.func.isRequired,
   failed: PropTypes.bool.isRequired,
-  fetchAlbums: PropTypes.func.isRequired,
+  fetchPhotos: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   match: PropTypes.shape(matchShape).isRequired,
+  photos: PropTypes.arrayOf(PropTypes.shape(photoShape)).isRequired,
 };
 
 export const mapStateToProps = state => ({
   failed: getFailed(state),
   isLoading: getIsLoading(state),
-  albums: Object.values(getAlbums(state)),
+  photos: Object.values(getPhotos(state)),
 });
 
 export const mapDispatchToProps = dispatch => ({
-  fetchAlbums: options => dispatch(fetchAlbums(options)),
+  fetchPhotos: options => dispatch(fetchPhotos(options)),
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(AlbumsContainer);
+)(PhotosContainer);

@@ -6,12 +6,7 @@ import {
   mapDispatchToProps,
   mapStateToProps,
 } from './PhotosContainer';
-import {
-  fetchPhotos,
-  getFailed,
-  getIsLoading,
-  getPhotos,
-} from '../ducks/photos';
+import { fetchPhotos, getFailed, getIsLoading, getPhotos } from './Duck';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);

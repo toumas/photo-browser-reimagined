@@ -2,62 +2,12 @@ import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { Route, Switch } from 'react-router';
-import { ConnectedRouter } from 'react-router-redux';
-import { store, history } from './store';
-import Gallery from './components/Gallery';
-import PhotoContainer from './containers/PhotoContainer';
-import Photo from './components/Photo';
-import AlbumsContainer from './containers/AlbumsContainer';
-import PhotoList from './components/PhotoList';
+import { store } from './store';
+import Screens from './screens';
 
 const App = () => (
   <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <Switch>
-        <Route exact path="/" component={Gallery} />
-        <Route path="/page/:page" render={props => <Gallery {...props} />} />
-        <Route
-          exact
-          path="/photo/:id"
-          render={({ match }) => (
-            <PhotoContainer match={match}>
-              {props => <Photo {...props} />}
-            </PhotoContainer>
-          )}
-        />
-        <Route
-          exact
-          path="/albums"
-          render={({ match }) => (
-            <AlbumsContainer match={match}>
-              {props => (
-                <PhotoList {...props}>
-                  {photo => <span>{photo.title}</span>}
-                </PhotoList>
-              )}
-            </AlbumsContainer>
-          )}
-        />
-        <Route
-          exact
-          path="/albums/page/:page"
-          render={({ match }) => (
-            <AlbumsContainer match={match}>
-              {props => (
-                <PhotoList {...props}>
-                  {photo => <span>{photo.title}</span>}
-                </PhotoList>
-              )}
-            </AlbumsContainer>
-          )}
-        />
-        <Route
-          path="/albums/:albumId/page/:page"
-          render={({ match }) => <Gallery match={match} />}
-        />
-      </Switch>
-    </ConnectedRouter>
+    <Screens />
   </Provider>
 );
 
