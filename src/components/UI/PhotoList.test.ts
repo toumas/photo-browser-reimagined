@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactRouterEnzymeContext from 'react-router-enzyme-context';
-import PhotoList from './PhotoList';
+import PhotoList from './PhotoList.tsx';
 
 /* eslint-disable no-undef */
 

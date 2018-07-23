@@ -8,7 +8,9 @@
     "target": "es5",
     "lib": ["es6", "dom"],
     "allowJs": false,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": ["node_modules/@types"]
   },
   "include": ["./src/"]
 }

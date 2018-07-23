@@ -1,22 +1,27 @@
 import * as React from 'react';
-import { ConnectedRouter } from 'react-router-redux';
 import { Route, Switch } from 'react-router-dom';
+import { ConnectedRouter } from 'react-router-redux';
+
 import { history } from '../store';
-import ScreensRoot from './Root/Root';
-import ScreensRootPage from './Root/Page/Page';
-import ScreensPhoto from './Photo/Photo';
-import ScreensAlbums from './Albums/Root';
-import ScreensAlbumsPage from './Albums/Page/Page';
+import ScreensAlbums from './Albums';
 import ScreensAlbumsAlbumPage from './Albums/Album/Page/Page';
+import ScreensAlbumsPage from './Albums/Page/Page';
+import ScreensPhoto from './Photo/Photo';
+import ScreensRoot from './Root/index';
+import ScreensRootPage from './Root/Page/Page';
 
 const Screens = () => (
   <ConnectedRouter history={history}>
     <Switch>
-      <Route exact path="/" component={ScreensRoot} />
+      <Route exact={true} path="/" component={ScreensRoot} />
       <Route path="/page/:page" component={ScreensRootPage} />
-      <Route exact path="/photo/:id" component={ScreensPhoto} />
-      <Route exact path="/albums" component={ScreensAlbums} />
-      <Route exact path="/albums/page/:page" component={ScreensAlbumsPage} />
+      <Route exact={true} path="/photo/:id" component={ScreensPhoto} />
+      <Route exact={true} path="/albums" component={ScreensAlbums} />
+      <Route
+        exact={true}
+        path="/albums/page/:page"
+        component={ScreensAlbumsPage}
+      />
       <Route
         path="/albums/:albumId/page/:page"
         component={ScreensAlbumsAlbumPage}
