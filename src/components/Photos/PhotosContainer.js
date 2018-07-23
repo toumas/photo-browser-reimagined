@@ -54,19 +54,19 @@ export class PhotosContainer extends Component {
     }
   }
 
-  getPath = id => getPath(this.props.match.url, this.state.options.page, id);
+  getPath = (id) => getPath(this.props.match.url, this.state.options.page, id);
 
   fetchPhotos = () => {
     this.props.fetchPhotos(this.state.options);
   };
 
   render() {
-    const { children, failed, isLoading, photos: items } = this.props;
+    const { children, failed, isLoading, photos } = this.props;
 
     return children({
       failed,
       isLoading,
-      items,
+      photos,
       retry: this.fetchPhotos,
       getPath: this.getPath,
     });
@@ -82,14 +82,14 @@ PhotosContainer.propTypes = {
   photos: PropTypes.arrayOf(PropTypes.shape(photoShape)).isRequired,
 };
 
-export const mapStateToProps = state => ({
+export const mapStateToProps = (state) => ({
   failed: getFailed(state),
   isLoading: getIsLoading(state),
   photos: Object.values(getPhotos(state)),
 });
 
-export const mapDispatchToProps = dispatch => ({
-  fetchPhotos: options => dispatch(fetchPhotos(options)),
+export const mapDispatchToProps = (dispatch) => ({
+  fetchPhotos: (options) => dispatch(fetchPhotos(options)),
 });
 
 export default connect(
