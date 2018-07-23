@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ScreensRoot from '../index';
+import ScreensRoot from '..';
 import { matchShape } from '../../../shapes';
 
 const ScreensRootPage = ({ match }) => <ScreensRoot match={match} />;

@@ -7,7 +7,7 @@ import ScreensAlbums from './Albums';
 import ScreensAlbumsAlbumPage from './Albums/Album/Page/Page';
 import ScreensAlbumsPage from './Albums/Page/Page';
 import ScreensPhoto from './Photo/Photo';
-import ScreensRoot from './Root/index';
+import ScreensRoot from './Root';
 import ScreensRootPage from './Root/Page/Page';
 
 const Screens = () => (
