@@ -1,14 +1,13 @@
-import PropTypes from 'prop-types';
-import React, { SFC } from 'react';
+import * as React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Photo, PhotoList } from '../../typings';
 import Retry from '../UI/Retry';
 
-const PhotoList: SFC<PhotoList> = (props) => {
-  const { isLoading, failed, retry, photos, children, getPath } = props;
+const PhotoList: React.SFC<PhotoList> = (props) => {
+  const { isLoading, failed, retry, items: photos, children, getPath } = props;
   if (isLoading) {
-    return <>Loading...</>;
+    return 'Loading...';
   }
   if (failed) {
     return <Retry text="Failed to load content" handleClick={retry} />;
@@ -16,10 +15,10 @@ const PhotoList: SFC<PhotoList> = (props) => {
   return <div>{renderPhotos(photos, getPath, children)}</div>;
 };
 
-function renderPhotos(
+export function renderPhotos(
   photos: Photo[],
   getPath: (id: number) => string,
-  children?: (photo?: Photo) => any,
+  children: (photo: Photo) => any,
 ): JSX.Element[] {
   return photos.map(
     (photo: Photo): JSX.Element => (
@@ -31,7 +30,7 @@ function renderPhotos(
         <Link to={getPath(photo.id)}>
           <img src={photo.thumbnailUrl} alt={photo.title} />
         </Link>
-        {children ? children(photo) : null}
+        {children(photo)}
       </div>
     ),
   );

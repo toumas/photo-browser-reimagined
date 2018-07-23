@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactRouterEnzymeContext from 'react-router-enzyme-context';
-import PhotoList from './PhotoList.tsx';
+import PhotoList, { renderPhotos } from './PhotoList';
 
 /* eslint-disable no-undef */
 
@@ -19,6 +19,7 @@ function getProps() {
       },
     ],
     retry: () => {},
+    children: jest.fn(),
   };
 }
 
@@ -42,4 +43,8 @@ describe('PhotoList component', () => {
       wrapper.props().items.length,
     );
   });
+
+  /* it('should invoke children prop if defined', () => {
+    expect(renderPhotos(getProps().items, getProps().getPath, getProps().children))
+  }); */
 });

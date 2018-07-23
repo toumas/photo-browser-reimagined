@@ -1,15 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { SFC } from 'react';
+import { RouteComponentProps } from 'react-router';
+
 import PhotoContainer from '../../components/Photo/Container';
 import Photo from '../../components/Photo/Photo';
-import { matchShape } from '../../shapes';
+import { PhotoContainerMatchParams } from '../../typings';
 
-const ScreensPhoto = ({ match }) => (
-  <PhotoContainer match={match}>{props => <Photo {...props} />}</PhotoContainer>
+const ScreensPhoto: SFC<RouteComponentProps<PhotoContainerMatchParams>> = ({
+  match,
+}) => (
+  <PhotoContainer match={match}>
+    {(props) => <Photo {...props} />}
+  </PhotoContainer>
 );
-
-ScreensPhoto.propTypes = {
-  match: PropTypes.shape(matchShape).isRequired,
-};
 
 export default ScreensPhoto;
