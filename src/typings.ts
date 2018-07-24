@@ -11,7 +11,7 @@ export interface PhotosProps {
   isLoading: boolean;
   photos: Photo[];
   retry(): void;
-  getPath(): string;
+  getPath(id: string): string;
 }
 
 export interface PhotoList {
@@ -20,9 +20,14 @@ export interface PhotoList {
   photos: Photo[];
   retry(): void;
   children?(photo: Photo): any;
-  getPath(): string;
+  getPath(id: string): string;
 }
 
 export interface PhotoContainerMatchParams {
   id: string;
+}
+
+export interface PhotosOptions {
+  limit: string;
+  page: string;
 }
