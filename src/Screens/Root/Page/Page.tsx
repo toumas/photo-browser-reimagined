@@ -1,12 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import ScreensRoot from '..';
-import { matchShape } from '../../../shapes';
+import React, { SFC } from 'react';
+import { RouteComponentProps } from 'react-router';
 
-const ScreensRootPage = ({ match }) => <ScreensRoot match={match} />;
+import ScreensRoot from '../';
 
-ScreensRootPage.propTypes = {
-  match: PropTypes.shape(matchShape).isRequired,
-};
+const ScreensRootPage: SFC<RouteComponentProps<{}>> = ({ match }) => (
+  <ScreensRoot match={match} />
+);
 
 export default ScreensRootPage;
