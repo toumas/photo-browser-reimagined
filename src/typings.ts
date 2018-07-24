@@ -14,6 +14,14 @@ export interface PhotosProps {
   getPath(id: string): string;
 }
 
+export interface AlbumsProps {
+  failed: boolean;
+  isLoading: boolean;
+  photos: AlbumThumbnail[];
+  retry(): void;
+  getPath(id: string): string;
+}
+
 export interface PhotoList {
   isLoading: boolean;
   failed: boolean;
@@ -27,7 +35,15 @@ export interface PhotoContainerMatchParams {
   id: string;
 }
 
-export interface PhotosOptions {
+export interface FetchOptions {
   limit: string;
   page: string;
+}
+
+export interface AlbumThumbnail {
+  albumId: number;
+  id: number;
+  title: string;
+  url: string;
+  thumbnailUrl: string;
 }

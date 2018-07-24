@@ -1,19 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { SFC } from 'react';
+import { match as IMatch } from 'react-router';
+
 import AlbumsContainer from '../../../components/Albums/Container';
 import PhotoList from '../../../components/UI/PhotoList';
-import { matchShape } from '../../../shapes';
+import { AlbumsProps } from '../../../typings';
 
-const ScreensAlbumsPage = ({ match }) => (
+interface Props {
+  match: IMatch<{}>;
+}
+
+const ScreensAlbumsPage: SFC<Props> = ({ match }) => (
   <AlbumsContainer match={match}>
-    {props => (
-      <PhotoList {...props}>{photo => <span>{photo.title}</span>}</PhotoList>
+    {(props: AlbumsProps) => (
+      <PhotoList {...props}>{(photo) => <span>{photo.title}</span>}</PhotoList>
     )}
   </AlbumsContainer>
 );
-
-ScreensAlbumsPage.propTypes = {
-  match: PropTypes.shape(matchShape).isRequired,
-};
 
 export default ScreensAlbumsPage;
