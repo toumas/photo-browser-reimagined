@@ -1,5 +1,5 @@
 import React, { SFC } from 'react';
-import { RouteComponentProps } from 'react-router';
+import { match } from 'react-router';
 import { Route } from 'react-router-dom';
 
 import PhotosContainer from '../../components/Photos/PhotosContainer';
@@ -7,22 +7,23 @@ import PhotoList from '../../components/UI/PhotoList';
 import { PhotosProps } from '../../typings';
 import ScreensPhoto from '../Photo/Photo';
 
-const ScreensRoot: SFC<RouteComponentProps<{}>> = (props) => (
+interface Props {
+  match: match<{}>;
+}
+
+const ScreensRoot: SFC<Props> = (props) => (
   <PhotosContainer match={props.match}>
     {renderPhotoList(props)}
   </PhotosContainer>
 );
 
-function renderPhotoList(
-  props: RouteComponentProps<{}>,
-): (photosProps) => JSX.Element {
-  const { match } = props;
+function renderPhotoList(props: Props): (photosProps) => JSX.Element {
   return (photosProps: PhotosProps): JSX.Element => (
     <React.Fragment>
       <PhotoList {...photosProps} />
       <Route
         exact={true}
-        path={`${match.url}/photo/:id`}
+        path={`${props.match.url}/photo/:id`}
         component={ScreensPhoto}
       />
     </React.Fragment>
