@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { connect, DispatchProp } from 'react-redux';
 import { match } from 'react-router';
 
-import { Photo, PhotosOptions, PhotosProps } from '../../typings';
+import { Photo, FetchOptions, PhotosProps } from '../../typings';
 import { fetchPhotos, getFailed, getIsLoading, getPhotos } from './Duck';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
   photos: Photo[];
   match: match<{}>;
   children(props: PhotosProps): any;
-  fetchPhotos(options: PhotosOptions): DispatchProp;
+  fetchPhotos(options: FetchOptions): DispatchProp;
 }
 
 function getPath(currentPath, currentPage, id) {
