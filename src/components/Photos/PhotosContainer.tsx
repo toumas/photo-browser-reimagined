@@ -1,8 +1,18 @@
 import { Component } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import { connect, DispatchProp } from 'react-redux';
+import { match } from 'react-router';
+
+import { Photo, PhotosOptions, PhotosProps } from '../../typings';
 import { fetchPhotos, getFailed, getIsLoading, getPhotos } from './Duck';
-import { photoShape, matchShape } from '../../shapes';
+
+interface Props {
+  failed: boolean;
+  isLoading: boolean;
+  photos: Photo[];
+  match: match<{}>;
+  children(props: PhotosProps): any;
+  fetchPhotos(options: PhotosOptions): DispatchProp;
+}
 
 function getPath(currentPath, currentPage, id) {
   if (currentPath === '/') {
@@ -11,7 +21,7 @@ function getPath(currentPath, currentPage, id) {
   return `${currentPath}/photo/${id}`;
 }
 
-export class PhotosContainer extends Component {
+export class PhotosContainer extends Component<Props> {
   static getDerivedStateFromProps(nextProps, prevState) {
     const { page, albumId } = nextProps.match.params;
 
@@ -39,8 +49,8 @@ export class PhotosContainer extends Component {
 
   state = {
     options: {
-      page: '1',
       limit: '10',
+      page: '1',
     },
   };
 
@@ -67,20 +77,12 @@ export class PhotosContainer extends Component {
       failed,
       isLoading,
       photos,
-      retry: this.fetchPhotos,
+      // tslint:disable-next-line
       getPath: this.getPath,
+      retry: this.fetchPhotos,
     });
   }
 }
-
-PhotosContainer.propTypes = {
-  children: PropTypes.func.isRequired,
-  failed: PropTypes.bool.isRequired,
-  fetchPhotos: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  match: PropTypes.shape(matchShape).isRequired,
-  photos: PropTypes.arrayOf(PropTypes.shape(photoShape)).isRequired,
-};
 
 export const mapStateToProps = (state) => ({
   failed: getFailed(state),

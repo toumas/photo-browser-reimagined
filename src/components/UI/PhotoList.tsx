@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Photo, PhotoList } from '../../typings';
-import Retry from '../UI/Retry';
+import Retry from './Retry';
 
 const PhotoList: React.SFC<PhotoList> = (props) => {
   const { isLoading, failed, retry, photos, children, getPath } = props;
