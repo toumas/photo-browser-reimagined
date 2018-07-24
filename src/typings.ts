@@ -17,9 +17,9 @@ export interface PhotosProps {
 export interface PhotoList {
   isLoading: boolean;
   failed: boolean;
-  items: Photo[];
+  photos: Photo[];
   retry(): void;
-  children(photo: Photo): any;
+  children?(photo: Photo): any;
   getPath(): string;
 }
 

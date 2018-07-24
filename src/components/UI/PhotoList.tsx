@@ -5,14 +5,19 @@ import { Photo, PhotoList } from '../../typings';
 import Retry from '../UI/Retry';
 
 const PhotoList: React.SFC<PhotoList> = (props) => {
-  const { isLoading, failed, retry, items: photos, children, getPath } = props;
+  const { isLoading, failed, retry, photos, children, getPath } = props;
   if (isLoading) {
-    return 'Loading...';
+    return <React.Fragment>Loading...</React.Fragment>;
   }
   if (failed) {
     return <Retry text="Failed to load content" handleClick={retry} />;
   }
+  // @ts-ignore https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11640
   return <div>{renderPhotos(photos, getPath, children)}</div>;
+};
+
+PhotoList.defaultProps = {
+  children: () => null,
 };
 
 export function renderPhotos(
