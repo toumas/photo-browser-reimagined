@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactRouterEnzymeContext from 'react-router-enzyme-context';
-import PhotoList, { renderPhotos } from './PhotoList';
+import PhotoList from './PhotoList.tsx';
 
 /* eslint-disable no-undef */
 
@@ -9,7 +9,7 @@ function getProps() {
     isLoading: true,
     failed: false,
     getPath: () => '',
-    items: [
+    photos: [
       {
         albumId: 1,
         id: 1,
@@ -19,7 +19,6 @@ function getProps() {
       },
     ],
     retry: () => {},
-    children: jest.fn(),
   };
 }
 
@@ -40,11 +39,12 @@ describe('PhotoList component', () => {
     const wrapper = mount(<PhotoList {...getProps()} />, options.get());
     wrapper.setProps({ isLoading: false, failed: false });
     expect(wrapper.find('.thumbnail')).toHaveLength(
-      wrapper.props().items.length,
+      wrapper.props().photos.length,
     );
   });
 
-  /* it('should invoke children prop if defined', () => {
-    expect(renderPhotos(getProps().items, getProps().getPath, getProps().children))
-  }); */
+  it('should provide default value for children prop', () => {
+    const wrapper = mount(<PhotoList {...getProps()} />);
+    expect(wrapper.props().children()).toEqual(null);
+  });
 });

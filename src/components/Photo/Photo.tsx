@@ -13,7 +13,7 @@ interface Props {
 
 const Photo: React.SFC<Props> = ({ failed, isLoading, photo, retry }) => {
   if (isLoading) {
-    return 'Loading...';
+    return <React.Fragment>Loading...</React.Fragment>;
   }
   if (failed) {
     return <Retry text="Failed to load photo" handleClick={retry} />;
