@@ -38,8 +38,9 @@ export interface PhotoContainerMatchParams {
 }
 
 export interface FetchOptions {
-  limit: string;
-  page: string;
+  limit?: string;
+  page?: string;
+  expand?: string;
 }
 
 export interface AlbumThumbnail {
