@@ -19,6 +19,10 @@ interface State {
   readonly items: PhotosObj;
 }
 
+export interface ThumbnailUrl {
+  [key: number]: string;
+}
+
 const defaultState: State = { failed: false, isLoading: false, items: {} };
 
 export default function reducer(state = defaultState, action) {
@@ -41,14 +45,14 @@ export default function reducer(state = defaultState, action) {
 export const getPhotos = (state) => state.photos.items;
 export const getFailed = (state) => state.photos.failed;
 export const getIsLoading = (state) => state.photos.isLoading;
-export const getThumbnails = (state) =>
+export const getThumbnails = (state): ThumbnailUrl =>
   Object.values(getPhotos(state)).reduce(
     (acc, photo: Photo) =>
       acc[photo.albumId]
         ? { ...acc }
         : { ...acc, [photo.albumId]: photo.thumbnailUrl },
     {},
-  );
+  ) as ThumbnailUrl;
 
 export const loading = () => createAction(LOAD, { isLoading: true });
 
