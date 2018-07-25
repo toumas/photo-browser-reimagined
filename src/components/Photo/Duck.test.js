@@ -12,7 +12,7 @@ import reducer, {
   getPhoto,
   getFailed,
   getIsLoading,
-} from './Duck';
+} from './Duck.ts';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -42,21 +42,32 @@ const normalizedPhoto = {
 
 describe('action creators', () => {
   it('should create loading action', () => {
-    const action = { type: LOAD, isLoading: true };
+    const action = {
+      type: LOAD,
+      payload: { isLoading: true },
+      meta: undefined,
+    };
     expect(loading()).toEqual(action);
   });
 
   it('should create success action', () => {
     const action = {
       type: SUCCESS,
-      isLoading: false,
-      photo: normalizedPhoto,
+      payload: {
+        isLoading: false,
+        photo: normalizedPhoto,
+      },
+      meta: undefined,
     };
     expect(success(normalizedPhoto)).toEqual(action);
   });
 
   it('should create fail action', () => {
-    const action = { type: FAIL, isLoading: false };
+    const action = {
+      type: FAIL,
+      payload: { isLoading: false },
+      meta: undefined,
+    };
     expect(fail()).toEqual(action);
   });
 });
@@ -77,8 +88,15 @@ describe('async actions', () => {
       photo: { failed: false, isLoading: false, photo: {} },
     });
     const expectedActions = [
-      { type: LOAD, isLoading: true },
-      { type: SUCCESS, isLoading: false, photo: normalizedPhoto },
+      { type: LOAD, payload: { isLoading: true }, meta: undefined },
+      {
+        type: SUCCESS,
+        payload: {
+          isLoading: false,
+          photo: normalizedPhoto,
+          meta: undefined,
+        },
+      },
     ];
 
     return store.dispatch(fetchPhoto(1)).then(() => {
@@ -95,8 +113,8 @@ describe('async actions', () => {
       photo: { failed: false, isLoading: false, photo: {} },
     });
     const expectedActions = [
-      { type: LOAD, isLoading: true },
-      { type: FAIL, isLoading: false },
+      { type: LOAD, payload: { isLoading: true }, meta: undefined },
+      { type: FAIL, payload: { isLoading: false }, meta: undefined },
     ];
 
     return store.dispatch(fetchPhoto(1)).then(() => {
@@ -108,14 +126,25 @@ describe('async actions', () => {
 describe('selectors', () => {
   it('should select photo', () => {
     const store = mockStore({
-      photo: { failed: false, isLoading: false, photo: normalizedPhoto },
+      photo: {
+        failed: false,
+        isLoading: false,
+        photo: normalizedPhoto,
+      },
     });
     expect(getPhoto(store.getState())).toEqual(normalizedPhoto);
   });
 
   it('should select failed', () => {
     const store = mockStore({
-      photo: { failed: true, isLoading: false, photo: normalizedPhoto },
+      photo: {
+        failed: true,
+        payload: {
+          isLoading: false,
+          photo: normalizedPhoto,
+          meta: undefined,
+        },
+      },
     });
     expect(getFailed(store.getState())).toEqual(true);
   });
@@ -138,7 +167,12 @@ describe('reducer', () => {
   });
 
   it('should handle LOAD', () => {
-    expect(reducer({}, { type: LOAD, isLoading: true })).toEqual({
+    expect(
+      reducer(
+        {},
+        { type: LOAD, payload: { isLoading: true }, meta: undefined },
+      ),
+    ).toEqual({
       isLoading: true,
       failed: false,
     });
@@ -146,7 +180,17 @@ describe('reducer', () => {
 
   it('should handle SUCCESS', () => {
     expect(
-      reducer({}, { type: SUCCESS, isLoading: false, photo: normalizedPhoto }),
+      reducer(
+        {},
+        {
+          type: SUCCESS,
+          payload: {
+            isLoading: false,
+            photo: normalizedPhoto,
+            meta: undefined,
+          },
+        },
+      ),
     ).toEqual({
       isLoading: false,
       photo: normalizedPhoto,
@@ -154,7 +198,12 @@ describe('reducer', () => {
   });
 
   it('should handle FAIL', () => {
-    expect(reducer({}, { type: FAIL, isLoading: false })).toEqual({
+    expect(
+      reducer(
+        {},
+        { type: FAIL, payload: { isLoading: false }, meta: undefined },
+      ),
+    ).toEqual({
       isLoading: false,
       failed: true,
     });

@@ -60,7 +60,7 @@ export const fail = () => createAction(FAIL, { isLoading: false });
 export const fetchPhotos = (options: FetchOptions) => async (dispatch) => {
   dispatch(loading());
   try {
-    const photos = await apiGetPhotos(options);
+    const photos: Photo[] = await apiGetPhotos(options);
     const normalizedData = normalize(photos, photoList);
     dispatch(success(normalizedData.entities.photos));
   } catch (err) {
