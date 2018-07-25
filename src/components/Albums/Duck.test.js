@@ -13,7 +13,7 @@ import reducer, {
   applyThumbnailUrls,
   getFailed,
   getIsLoading,
-} from './Duck';
+} from './Duck.ts';
 import {
   LOAD as PHOTOS_LOAD,
   SUCCESS as PHOTOS_SUCCESS,
@@ -95,20 +95,31 @@ const thumbnailsUrls = {
 
 describe('action creators', () => {
   it('should create loading action', () => {
-    const action = { type: LOAD, isLoading: true };
+    const action = {
+      type: LOAD,
+      payload: { isLoading: true },
+      meta: undefined,
+    };
     expect(loading()).toEqual(action);
   });
 
   it('should create fail action', () => {
-    const action = { type: FAIL, isLoading: false };
+    const action = {
+      type: FAIL,
+      payload: { isLoading: false },
+      meta: undefined,
+    };
     expect(fail()).toEqual(action);
   });
 
   it('should create success action', () => {
     const action = {
       type: SUCCESS,
-      isLoading: false,
-      items: normalizedAlbums,
+      payload: {
+        isLoading: false,
+        items: normalizedAlbums,
+      },
+      meta: undefined,
     };
     expect(success(normalizedAlbums)).toEqual(action);
   });
@@ -140,9 +151,13 @@ describe('async actions', () => {
       albums: { failed: false, isLoading: false, items: {} },
     });
     const expectedActions = [
-      { type: LOAD, isLoading: true },
+      { type: LOAD, payload: { isLoading: true }, meta: undefined },
       { type: PHOTOS_LOAD, payload: { isLoading: true }, meta: undefined },
-      { type: SUCCESS, isLoading: false, items: normalizedAlbums },
+      {
+        type: SUCCESS,
+        payload: { isLoading: false, items: normalizedAlbums },
+        meta: undefined,
+      },
       {
         type: PHOTOS_SUCCESS,
         payload: { isLoading: false, items: normalizedPhotos },
@@ -164,8 +179,8 @@ describe('async actions', () => {
       albums: { failed: false, isLoading: false, items: {} },
     });
     const expectedActions = [
-      { type: LOAD, isLoading: true },
-      { type: FAIL, isLoading: false },
+      { type: LOAD, payload: { isLoading: true }, meta: undefined },
+      { type: FAIL, payload: { isLoading: false }, meta: undefined },
     ];
 
     return store.dispatch(fetchAlbums({ page: '1', limit: '2' })).then(() => {
@@ -192,10 +207,10 @@ it('should create fail action when fetching of thumbnails failed', () => {
     albums: { failed: false, isLoading: false, items: {} },
   });
   const expectedActions = [
-    { type: LOAD, isLoading: true },
+    { type: LOAD, payload: { isLoading: true }, meta: undefined },
     { type: PHOTOS_LOAD, payload: { isLoading: true }, meta: undefined },
     { type: PHOTOS_FAIL, payload: { isLoading: false }, meta: undefined },
-    { type: FAIL, isLoading: false },
+    { type: FAIL, payload: { isLoading: false }, meta: undefined },
   ];
 
   return store.dispatch(fetchAlbums({ page: '1', limit: '2' })).then(() => {
@@ -239,7 +254,12 @@ describe('reducer', () => {
   });
 
   it('should handle LOAD', () => {
-    expect(reducer({}, { type: LOAD, isLoading: true })).toEqual({
+    expect(
+      reducer(
+        {},
+        { type: LOAD, payload: { isLoading: true }, meta: undefined },
+      ),
+    ).toEqual({
       isLoading: true,
       failed: false,
     });
@@ -247,7 +267,14 @@ describe('reducer', () => {
 
   it('should handle SUCCESS', () => {
     expect(
-      reducer({}, { type: SUCCESS, isLoading: false, items: normalizedAlbums }),
+      reducer(
+        {},
+        {
+          type: SUCCESS,
+          payload: { isLoading: false, items: normalizedAlbums },
+          meta: undefined,
+        },
+      ),
     ).toEqual({
       isLoading: false,
       items: normalizedAlbums,
@@ -255,7 +282,12 @@ describe('reducer', () => {
   });
 
   it('should handle FAIL', () => {
-    expect(reducer({}, { type: FAIL, isLoading: false })).toEqual({
+    expect(
+      reducer(
+        {},
+        { type: FAIL, payload: { isLoading: false }, meta: undefined },
+      ),
+    ).toEqual({
       isLoading: false,
       failed: true,
     });
