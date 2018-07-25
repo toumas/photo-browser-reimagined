@@ -18,7 +18,7 @@ import {
   LOAD as PHOTOS_LOAD,
   SUCCESS as PHOTOS_SUCCESS,
   FAIL as PHOTOS_FAIL,
-} from '../Photos/Duck';
+} from '../Photos/Duck.ts';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -141,9 +141,13 @@ describe('async actions', () => {
     });
     const expectedActions = [
       { type: LOAD, isLoading: true },
-      { type: PHOTOS_LOAD, isLoading: true },
+      { type: PHOTOS_LOAD, payload: { isLoading: true }, meta: undefined },
       { type: SUCCESS, isLoading: false, items: normalizedAlbums },
-      { type: PHOTOS_SUCCESS, isLoading: false, items: normalizedPhotos },
+      {
+        type: PHOTOS_SUCCESS,
+        payload: { isLoading: false, items: normalizedPhotos },
+        meta: undefined,
+      },
     ];
 
     return store.dispatch(fetchAlbums({ page: '1', limit: '2' })).then(() => {
@@ -189,8 +193,8 @@ it('should create fail action when fetching of thumbnails failed', () => {
   });
   const expectedActions = [
     { type: LOAD, isLoading: true },
-    { type: PHOTOS_LOAD, isLoading: true },
-    { type: PHOTOS_FAIL, isLoading: false },
+    { type: PHOTOS_LOAD, payload: { isLoading: true }, meta: undefined },
+    { type: PHOTOS_FAIL, payload: { isLoading: false }, meta: undefined },
     { type: FAIL, isLoading: false },
   ];
 
