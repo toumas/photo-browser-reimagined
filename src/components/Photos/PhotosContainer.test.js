@@ -5,7 +5,7 @@ import {
   PhotosContainer,
   mapDispatchToProps,
   mapStateToProps,
-} from './PhotosContainer.tsx';
+} from './Container.tsx';
 import { fetchPhotos, getFailed, getIsLoading, getPhotos } from './Duck';
 
 const middlewares = [thunk];

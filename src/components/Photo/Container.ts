@@ -2,19 +2,28 @@ import { Component } from 'react';
 import { connect, DispatchProp } from 'react-redux';
 import { match } from 'react-router';
 
+import { ApplicationState } from '../../reducers';
 import { Photo, PhotoContainerMatchParams } from '../../typings';
 import { fetchPhoto, getFailed, getIsLoading, getPhoto } from './Duck';
 
 interface Props {
-  failed: boolean;
-  isLoading: boolean;
-  photo: Photo;
   match: match<PhotoContainerMatchParams>;
-  fetchPhoto(id: string): DispatchProp;
   children(props): JSX.Element;
 }
 
-export class PhotoContainer extends Component<Props> {
+interface PropsFromState {
+  failed: boolean;
+  isLoading: boolean;
+  photo: Photo;
+}
+
+interface PropsFromDispatch {
+  fetchPhoto(id: string): DispatchProp;
+}
+
+type PhotoContainerProps = PropsFromState & PropsFromDispatch;
+
+export class PhotoContainer extends Component<PhotoContainerProps & Props> {
   componentDidMount() {
     this.props.fetchPhoto(this.props.match.params.id);
   }
@@ -38,7 +47,7 @@ export class PhotoContainer extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state) => ({
+export const mapStateToProps = (state: ApplicationState) => ({
   failed: getFailed(state),
   isLoading: getIsLoading(state),
   photo: getPhoto(state),
