@@ -20,15 +20,19 @@ interface AlbumsObj {
   [key: string]: Album;
 }
 
-interface State {
+export interface AlbumsState {
   readonly failed: boolean;
   readonly isLoading: boolean;
   readonly items: AlbumsObj;
 }
 
-const defaultState: State = { failed: false, isLoading: false, items: {} };
+const defaultState: AlbumsState = {
+  failed: false,
+  isLoading: false,
+  items: {},
+};
 
-export default function reducer(state = defaultState, action) {
+export default function reducer(state: AlbumsState = defaultState, action) {
   switch (action.type) {
     case LOAD:
       return { ...state, failed: false, isLoading: action.payload.isLoading };

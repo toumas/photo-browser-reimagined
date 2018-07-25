@@ -13,7 +13,7 @@ interface PhotosObj {
   readonly [key: string]: Photo;
 }
 
-interface State {
+export interface PhotosState {
   readonly failed: boolean;
   readonly isLoading: boolean;
   readonly items: PhotosObj;
@@ -23,9 +23,13 @@ export interface ThumbnailUrl {
   [key: number]: string;
 }
 
-const defaultState: State = { failed: false, isLoading: false, items: {} };
+const defaultState: PhotosState = {
+  failed: false,
+  isLoading: false,
+  items: {},
+};
 
-export default function reducer(state = defaultState, action) {
+export default function reducer(state: PhotosState = defaultState, action) {
   switch (action.type) {
     case LOAD:
       return { ...state, failed: false, isLoading: action.payload.isLoading };

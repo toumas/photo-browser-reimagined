@@ -9,20 +9,20 @@ export const LOAD: string = 'app/photo/LOAD';
 export const SUCCESS: string = 'app/photo/SUCCESS';
 export const FAIL: string = 'app/photo/FAIL';
 
-interface State {
+export interface PhotoState {
   readonly failed: boolean;
   readonly isLoading: boolean;
   readonly photo: Photo;
 }
 
-const defaultState: State = {
+const defaultState: PhotoState = {
   failed: false,
   isLoading: false,
   // tslint:disable-next-line
   photo: {} as Photo,
 };
 
-export default function reducer(state = defaultState, action) {
+export default function reducer(state: PhotoState = defaultState, action) {
   switch (action.type) {
     case LOAD:
       return { ...state, failed: false, isLoading: action.payload.isLoading };
