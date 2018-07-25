@@ -13,7 +13,7 @@ import reducer, {
   getIsLoading,
   getPhotos,
   getThumbnails,
-} from './Duck';
+} from './Duck.ts';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -60,20 +60,31 @@ const thumbnailsUrls = {
 
 describe('action creators', () => {
   it('should create loading action', () => {
-    const action = { type: LOAD, isLoading: true };
+    const action = {
+      type: LOAD,
+      payload: { isLoading: true },
+      meta: undefined,
+    };
     expect(loading()).toEqual(action);
   });
 
   it('should create fail action', () => {
-    const action = { type: FAIL, isLoading: false };
+    const action = {
+      type: FAIL,
+      payload: { isLoading: false },
+      meta: undefined,
+    };
     expect(fail()).toEqual(action);
   });
 
   it('should create success action', () => {
     const action = {
       type: SUCCESS,
-      isLoading: false,
-      items: normalizedPhotos,
+      payload: {
+        isLoading: false,
+        items: normalizedPhotos,
+      },
+      meta: undefined,
     };
     expect(success(normalizedPhotos)).toEqual(action);
   });
@@ -95,8 +106,12 @@ describe('async actions', () => {
       photos: { failed: false, isLoading: false, items: {} },
     });
     const expectedActions = [
-      { type: LOAD, isLoading: true },
-      { type: SUCCESS, isLoading: false, items: normalizedPhotos },
+      { type: LOAD, payload: { isLoading: true }, meta: undefined },
+      {
+        type: SUCCESS,
+        payload: { isLoading: false, items: normalizedPhotos },
+        meta: undefined,
+      },
     ];
 
     return store.dispatch(fetchPhotos({ page: '1', limit: '2' })).then(() => {
@@ -113,8 +128,8 @@ describe('async actions', () => {
       photos: { failed: false, isLoading: false, items: {} },
     });
     const expectedActions = [
-      { type: LOAD, isLoading: true },
-      { type: FAIL, isLoading: false },
+      { type: LOAD, payload: { isLoading: true }, meta: undefined },
+      { type: FAIL, payload: { isLoading: false }, meta: undefined },
     ];
 
     return store.dispatch(fetchPhotos({ page: '1', limit: '2' })).then(() => {
@@ -162,7 +177,12 @@ describe('reducer', () => {
   });
 
   it('should handle LOAD', () => {
-    expect(reducer({}, { type: LOAD, isLoading: true })).toEqual({
+    expect(
+      reducer(
+        {},
+        { type: LOAD, payload: { isLoading: true }, meta: undefined },
+      ),
+    ).toEqual({
       isLoading: true,
       failed: false,
     });
@@ -170,7 +190,14 @@ describe('reducer', () => {
 
   it('should handle SUCCESS', () => {
     expect(
-      reducer({}, { type: SUCCESS, isLoading: false, items: normalizedPhotos }),
+      reducer(
+        {},
+        {
+          type: SUCCESS,
+          payload: { isLoading: false, items: normalizedPhotos },
+          meta: undefined,
+        },
+      ),
     ).toEqual({
       isLoading: false,
       items: normalizedPhotos,
@@ -178,7 +205,12 @@ describe('reducer', () => {
   });
 
   it('should handle FAIL', () => {
-    expect(reducer({}, { type: FAIL, isLoading: false })).toEqual({
+    expect(
+      reducer(
+        {},
+        { type: FAIL, payload: { isLoading: false }, meta: undefined },
+      ),
+    ).toEqual({
       isLoading: false,
       failed: true,
     });
