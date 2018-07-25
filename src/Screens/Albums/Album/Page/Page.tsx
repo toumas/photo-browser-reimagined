@@ -1,12 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { SFC } from 'react';
+import { match as IMatch } from 'react-router';
+
 import ScreensRootPage from '../../../Root/Page/Page';
-import { matchShape } from '../../../../shapes';
 
-const ScreensAlbumsAlbumPage = ({ match }) => <ScreensRootPage match={match} />;
+interface Props {
+  match: IMatch<{}>;
+}
 
-ScreensAlbumsAlbumPage.propTypes = {
-  match: PropTypes.shape(matchShape).isRequired,
-};
+const ScreensAlbumsAlbumPage: SFC<Props> = ({ match }) => (
+  <ScreensRootPage match={match} />
+);
 
 export default ScreensAlbumsAlbumPage;

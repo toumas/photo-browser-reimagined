@@ -1,24 +1,16 @@
 import * as React from 'react';
-import { DispatchProp } from 'react-redux';
 
-import { Photo } from '../../typings';
+import { Photo, PhotoProps } from '../../typings';
 import Retry from '../UI/Retry';
 
-interface Props {
-  failed: boolean;
-  isLoading: boolean;
-  photo: Photo;
-  retry(): DispatchProp;
-}
-
-const Photo: React.SFC<Props> = ({ failed, isLoading, photo, retry }) => {
-  if (isLoading) {
+const Photo: React.SFC<PhotoProps> = (props: PhotoProps) => {
+  if (props.isLoading) {
     return <React.Fragment>Loading...</React.Fragment>;
   }
-  if (failed) {
-    return <Retry text="Failed to load photo" handleClick={retry} />;
+  if (props.failed) {
+    return <Retry text="Failed to load photo" handleClick={props.retry} />;
   }
-  return <img src={photo.url} alt={photo.title} />;
+  return <img src={props.photo.url} alt={props.photo.title} />;
 };
 
 export default Photo;

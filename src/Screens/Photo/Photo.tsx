@@ -3,13 +3,13 @@ import { RouteComponentProps } from 'react-router';
 
 import PhotoContainer from '../../components/Photo/Container';
 import Photo from '../../components/Photo/Photo';
-import { PhotoContainerMatchParams } from '../../typings';
+import { PhotoContainerMatchParams, PhotoProps } from '../../typings';
 
 const ScreensPhoto: SFC<RouteComponentProps<PhotoContainerMatchParams>> = ({
   match,
 }) => (
   <PhotoContainer match={match}>
-    {(props) => <Photo {...props} />}
+    {(props: PhotoProps) => <Photo {...props} />}
   </PhotoContainer>
 );
 

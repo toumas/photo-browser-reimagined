@@ -1,9 +1,13 @@
 import React, { SFC } from 'react';
-import { RouteComponentProps } from 'react-router';
+import { match as IMatch } from 'react-router';
 
-import ScreensRoot from '..';
+import ScreensRoot from '../';
 
-const ScreensRootPage: SFC<RouteComponentProps<{}>> = ({ match }) => (
+interface Props {
+  match: IMatch<{}>;
+}
+
+const ScreensRootPage: SFC<Props> = ({ match }) => (
   <ScreensRoot match={match} />
 );
 
