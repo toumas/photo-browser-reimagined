@@ -2,17 +2,26 @@ import { Component } from 'react';
 import { connect, DispatchProp } from 'react-redux';
 import { match } from 'react-router';
 
+import { ApplicationState } from '../../reducers';
 import { FetchOptions, Photo, PhotosProps } from '../../typings';
 import { fetchPhotos, getFailed, getIsLoading, getPhotos } from './Duck';
 
 interface Props {
+  match: match<{}>;
+  children(props: PhotosProps): JSX.Element;
+}
+
+interface PropsFromState {
   failed: boolean;
   isLoading: boolean;
   photos: Photo[];
-  match: match<{}>;
-  children(props: PhotosProps): JSX.Element;
+}
+
+interface PropsFromDispatch {
   fetchPhotos(options: FetchOptions): DispatchProp;
 }
+
+type PhotosContainerProps = PropsFromState & PropsFromDispatch;
 
 function getPath(currentPath: string, currentPage: string, id: string): string {
   if (currentPath === '/') {
@@ -21,7 +30,7 @@ function getPath(currentPath: string, currentPage: string, id: string): string {
   return `${currentPath}/photo/${id}`;
 }
 
-export class PhotosContainer extends Component<Props> {
+export class PhotosContainer extends Component<PhotosContainerProps & Props> {
   static getDerivedStateFromProps(nextProps, prevState) {
     const { page, albumId } = nextProps.match.params;
 
@@ -85,7 +94,7 @@ export class PhotosContainer extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state) => ({
+export const mapStateToProps = (state: ApplicationState) => ({
   failed: getFailed(state),
   isLoading: getIsLoading(state),
   photos: Object.values(getPhotos(state)),

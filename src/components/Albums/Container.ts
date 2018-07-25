@@ -2,17 +2,26 @@ import { Component } from 'react';
 import { connect, DispatchProp } from 'react-redux';
 import { match } from 'react-router';
 
+import { ApplicationState } from '../../reducers';
 import { AlbumThumbnail, FetchOptions, PhotosProps } from '../../typings';
 import { fetchAlbums, getAlbums, getFailed, getIsLoading } from './Duck';
 
 interface Props {
+  match: match<{}>;
+  children(props: PhotosProps): JSX.Element;
+}
+
+interface PropsFromState {
   albums: AlbumThumbnail[];
   failed: boolean;
   isLoading: boolean;
-  match: match<{}>;
-  fetchAlbums(options: FetchOptions): DispatchProp;
-  children(props: PhotosProps): JSX.Element;
 }
+
+interface PropsFromDispatch {
+  fetchAlbums(options: FetchOptions): DispatchProp;
+}
+
+type AlbumsContainerProps = PropsFromState & PropsFromDispatch;
 
 function getPath(currentPath: string, currentPage: string, id: string): string {
   if (/^\/albums\/page\/[0-9]+$/.test(currentPath)) {
@@ -21,7 +30,7 @@ function getPath(currentPath: string, currentPage: string, id: string): string {
   return `${currentPath}/${id}/page/${currentPage}`;
 }
 
-export class AlbumsContainer extends Component<Props> {
+export class AlbumsContainer extends Component<AlbumsContainerProps & Props> {
   static getDerivedStateFromProps(nextProps, prevState) {
     const { page } = nextProps.match.params;
 
@@ -82,7 +91,7 @@ export class AlbumsContainer extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state) => ({
+export const mapStateToProps = (state: ApplicationState) => ({
   albums: Object.values(getAlbums(state)),
   failed: getFailed(state),
   isLoading: getIsLoading(state),

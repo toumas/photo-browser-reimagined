@@ -2,7 +2,7 @@ import React, { SFC } from 'react';
 import { match } from 'react-router';
 import { Route } from 'react-router-dom';
 
-import PhotosContainer from '../../components/Photos/PhotosContainer';
+import PhotosContainer from '../../components/Photos/Container';
 import PhotoList from '../../components/UI/PhotoList';
 import { PhotosProps } from '../../typings';
 import ScreensPhoto from '../Photo/Photo';
