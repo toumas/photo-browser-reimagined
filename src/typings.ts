@@ -1,3 +1,5 @@
+import { DispatchProp } from 'react-redux';
+
 export interface Photo {
   albumId: number;
   id: number;
@@ -27,7 +29,7 @@ export interface PhotoList {
   failed: boolean;
   photos: Photo[];
   retry(): void;
-  children?(photo: Photo): any;
+  children?(photo: Photo): JSX.Element | null;
   getPath(id: string): string;
 }
 
@@ -46,4 +48,11 @@ export interface AlbumThumbnail {
   title: string;
   url: string;
   thumbnailUrl: string;
+}
+
+export interface PhotoProps {
+  failed: boolean;
+  isLoading: boolean;
+  photo: Photo;
+  retry(): DispatchProp;
 }

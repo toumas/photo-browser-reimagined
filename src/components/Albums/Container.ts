@@ -11,10 +11,10 @@ interface Props {
   isLoading: boolean;
   match: match<{}>;
   fetchAlbums(options: FetchOptions): DispatchProp;
-  children(props: PhotosProps): any;
+  children(props: PhotosProps): JSX.Element;
 }
 
-function getPath(currentPath, currentPage, id) {
+function getPath(currentPath: string, currentPage: string, id: string): string {
   if (/^\/albums\/page\/[0-9]+$/.test(currentPath)) {
     return `/albums/${id}/page/1`;
   }
@@ -61,7 +61,8 @@ export class AlbumsContainer extends Component<Props> {
     }
   }
 
-  getPath = (id) => getPath(this.props.match.url, this.state.options.page, id);
+  getPath = (id: string) =>
+    getPath(this.props.match.url, this.state.options.page, id);
 
   fetchAlbums = () => {
     this.props.fetchAlbums(this.state.options);
@@ -88,7 +89,7 @@ export const mapStateToProps = (state) => ({
 });
 
 export const mapDispatchToProps = (dispatch) => ({
-  fetchAlbums: (options) => dispatch(fetchAlbums(options)),
+  fetchAlbums: (options: FetchOptions) => dispatch(fetchAlbums(options)),
 });
 
 export default connect(

@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { connect, DispatchProp } from 'react-redux';
 import { match } from 'react-router';
 
-import { Photo, FetchOptions, PhotosProps } from '../../typings';
+import { FetchOptions, Photo, PhotosProps } from '../../typings';
 import { fetchPhotos, getFailed, getIsLoading, getPhotos } from './Duck';
 
 interface Props {
@@ -10,11 +10,11 @@ interface Props {
   isLoading: boolean;
   photos: Photo[];
   match: match<{}>;
-  children(props: PhotosProps): any;
+  children(props: PhotosProps): JSX.Element;
   fetchPhotos(options: FetchOptions): DispatchProp;
 }
 
-function getPath(currentPath, currentPage, id) {
+function getPath(currentPath: string, currentPage: string, id: string): string {
   if (currentPath === '/') {
     return `/page/${currentPage}/photo/${id}`;
   }
@@ -64,7 +64,8 @@ export class PhotosContainer extends Component<Props> {
     }
   }
 
-  getPath = (id) => getPath(this.props.match.url, this.state.options.page, id);
+  getPath = (id: string) =>
+    getPath(this.props.match.url, this.state.options.page, id);
 
   fetchPhotos = () => {
     this.props.fetchPhotos(this.state.options);
@@ -91,7 +92,7 @@ export const mapStateToProps = (state) => ({
 });
 
 export const mapDispatchToProps = (dispatch) => ({
-  fetchPhotos: (options) => dispatch(fetchPhotos(options)),
+  fetchPhotos: (options: FetchOptions) => dispatch(fetchPhotos(options)),
 });
 
 export default connect(

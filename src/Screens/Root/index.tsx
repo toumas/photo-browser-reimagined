@@ -11,7 +11,7 @@ interface Props {
   match: match<{}>;
 }
 
-const ScreensRoot: SFC<Props> = (props) => (
+const ScreensRoot: SFC<Props> = (props: Props) => (
   <PhotosContainer match={props.match}>
     {renderPhotoList(props)}
   </PhotosContainer>

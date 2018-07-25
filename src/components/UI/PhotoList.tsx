@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Photo, PhotoList } from '../../typings';
 import Retry from './Retry';
 
-const PhotoList: React.SFC<PhotoList> = (props) => {
+const PhotoList: React.SFC<PhotoList> = (props: PhotoList) => {
   const { isLoading, failed, retry, photos, children, getPath } = props;
   if (isLoading) {
     return <React.Fragment>Loading...</React.Fragment>;
