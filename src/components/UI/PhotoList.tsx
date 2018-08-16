@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { Grid, Responsive } from 'semantic-ui-react';
 
 import { Photo, PhotoList } from '../../typings';
 import Retry from './Retry';
@@ -20,24 +21,62 @@ PhotoList.defaultProps = {
   children: () => null,
 };
 
+function renderPhoto(
+  photo: Photo,
+  getPath: (id: number) => string,
+  children: (photo: Photo) => any,
+) {
+  return (
+    <div
+      className="thumbnail"
+      style={{ display: 'inline-block', width: '100%' }}
+      key={photo.id}
+    >
+      <Link to={getPath(photo.id)}>
+        <img
+          src={photo.thumbnailUrl}
+          alt={photo.title}
+          style={{ width: '100%' }}
+        />
+      </Link>
+      {children(photo)}
+    </div>
+  );
+}
+
 export function renderPhotos(
   photos: Photo[],
   getPath: (id: number) => string,
   children: (photo: Photo) => any,
-): JSX.Element[] {
-  return photos.map(
-    (photo: Photo): JSX.Element => (
-      <div
-        className="thumbnail"
-        style={{ display: 'inline-block' }}
-        key={photo.id}
-      >
-        <Link to={getPath(photo.id)}>
-          <img src={photo.thumbnailUrl} alt={photo.title} />
-        </Link>
-        {children(photo)}
-      </div>
-    ),
+) {
+  return (
+    <Grid doubling={true} stackable={false}>
+      {photos.map(
+        (photo: Photo): JSX.Element => (
+          <React.Fragment key={photo.id}>
+            <Responsive maxWidth={767} as={React.Fragment}>
+              <Responsive maxWidth={575} as={Grid.Column} width={16}>
+                {renderPhoto(photo, getPath, children)}
+              </Responsive>
+              <Responsive minWidth={576} as={Grid.Column} width={8}>
+                {renderPhoto(photo, getPath, children)}
+              </Responsive>
+            </Responsive>
+            <Responsive
+              minWidth={768}
+              maxWidth={991}
+              as={Grid.Column}
+              width={5}
+            >
+              {renderPhoto(photo, getPath, children)}
+            </Responsive>
+            <Responsive minWidth={992} as={Grid.Column} width={3}>
+              {renderPhoto(photo, getPath, children)}
+            </Responsive>
+          </React.Fragment>
+        ),
+      )}
+    </Grid>
   );
 }
 
