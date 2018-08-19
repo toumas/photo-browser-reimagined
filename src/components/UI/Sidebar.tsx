@@ -1,33 +1,33 @@
+import { Location } from 'history';
 import * as React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router';
-import { Link } from 'react-router-dom';
-import { Icon, Menu } from 'semantic-ui-react';
+import { NavLink } from 'react-router-dom';
+import { Header, Icon, Menu, Responsive } from 'semantic-ui-react';
 
-const Sidebar: React.SFC<RouteComponentProps<{}>> = ({
-  location: { state: { active = '' } = {} },
-}) => (
-  <Menu icon="labeled" fixed={'left'} vertical={true}>
-    <Menu.Item
-      name="photos"
-      link={true}
-      as={Link}
-      to={{ pathname: '/', state: { active: 'photos' } }}
-      active={active === 'photos'}
-    >
-      <Icon name="picture" />
-      Photos
+const Sidebar: React.SFC<{ location: Location }> = () => (
+  <Responsive
+    minWidth={992}
+    as={Menu}
+    icon="labeled"
+    vertical={true}
+    fluid={true}
+    style={{ height: '100vh' }}
+  >
+    <Menu.Item header={true} position="left" style={{ textAlign: 'left' }}>
+      <Header as="h1">Photo Browser</Header>
     </Menu.Item>
-    <Menu.Item
-      name="albums"
-      link={true}
-      as={Link}
-      to={{ pathname: '/albums', state: { active: 'albums' } }}
-      active={active === 'albums'}
-    >
-      <Icon name="images" />
-      Albums
+    <Menu.Item name="photos" link={true} exact={true} as={NavLink} to="/">
+      <Header as="h2">
+        <Icon name="picture" />
+        <Header.Content>Photos</Header.Content>
+      </Header>
     </Menu.Item>
-  </Menu>
+    <Menu.Item name="albums" link={true} as={NavLink} to="/albums">
+      <Header as="h2">
+        <Icon name="images" />
+        <Header.Content>Albums</Header.Content>
+      </Header>
+    </Menu.Item>
+  </Responsive>
 );
 
-export default withRouter(Sidebar);
+export default Sidebar;
