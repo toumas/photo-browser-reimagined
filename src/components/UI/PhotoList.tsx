@@ -14,7 +14,7 @@ const PhotoList: React.SFC<PhotoList> = (props: PhotoList) => {
     return <Retry text="Failed to load content" handleClick={retry} />;
   }
   // @ts-ignore https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11640
-  return <div>{renderPhotos(photos, getPath, children)}</div>;
+  return renderPhotos(photos, getPath, children);
 };
 
 PhotoList.defaultProps = {
@@ -50,7 +50,7 @@ export function renderPhotos(
   children: (photo: Photo) => any,
 ) {
   return (
-    <Grid doubling={true} stackable={false}>
+    <Grid columns={5}>
       {photos.map(
         (photo: Photo): JSX.Element => (
           <React.Fragment key={photo.id}>
@@ -66,11 +66,11 @@ export function renderPhotos(
               minWidth={768}
               maxWidth={991}
               as={Grid.Column}
-              width={5}
+              width={4}
             >
               {renderPhoto(photo, getPath, children)}
             </Responsive>
-            <Responsive minWidth={992} as={Grid.Column} width={3}>
+            <Responsive minWidth={992} as={Grid.Column}>
               {renderPhoto(photo, getPath, children)}
             </Responsive>
           </React.Fragment>
