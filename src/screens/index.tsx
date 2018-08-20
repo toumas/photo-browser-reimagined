@@ -27,7 +27,7 @@ const Screens = (props) => (
           <Sidebar location={history.location} />
         </Grid.Column>
         <Grid.Column mobile={16} tablet={16} computer={13}>
-          <Container fluid={true} style={{ marginTop: '14px' }}>
+          <Container fluid={true}>
             <Switch>
               <Route exact={true} path="/" component={ScreensRoot} />
               <Route path="/page/:page" component={ScreensRootPage} />

@@ -1,3 +1,4 @@
+import { SyntheticEvent } from 'react';
 import { DispatchProp } from 'react-redux';
 
 export interface Photo {
@@ -12,8 +13,10 @@ export interface PhotosProps {
   failed: boolean;
   isLoading: boolean;
   photos: Photo[];
+  paginationOptions: PaginationOptions;
   retry(): void;
-  getPath(id: string): string;
+  getPath(id: number): string;
+  handlePaginationChange(event: SyntheticEvent, data: object);
 }
 
 export interface AlbumsProps {
@@ -28,9 +31,16 @@ export interface PhotoList {
   isLoading: boolean;
   failed: boolean;
   photos: Photo[];
+  paginationOptions: PaginationOptions;
+  handlePaginationChange(event: SyntheticEvent, data: object);
   retry(): void;
   children?(photo: Photo): JSX.Element | null;
-  getPath(id: string): string;
+  getPath(id: number): string;
+}
+
+export interface PaginationOptions {
+  activePage: string;
+  totalPages: number;
 }
 
 export interface PhotoContainerMatchParams {

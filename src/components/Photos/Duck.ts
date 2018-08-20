@@ -13,10 +13,16 @@ interface PhotosObj {
   readonly [key: string]: Photo;
 }
 
+interface PhotosResponse {
+  readonly data: Photo[];
+  readonly totalCount: number;
+}
+
 export interface PhotosState {
   readonly failed: boolean;
   readonly isLoading: boolean;
   readonly items: PhotosObj;
+  readonly totalCount: number;
 }
 
 export interface ThumbnailUrl {
@@ -27,6 +33,7 @@ const defaultState: PhotosState = {
   failed: false,
   isLoading: false,
   items: {},
+  totalCount: 0,
 };
 
 export default function reducer(state: PhotosState = defaultState, action) {
@@ -38,6 +45,7 @@ export default function reducer(state: PhotosState = defaultState, action) {
         ...state,
         isLoading: action.payload.isLoading,
         items: action.payload.items,
+        totalCount: action.payload.totalCount,
       };
     case FAIL:
       return { ...state, failed: true, isLoading: action.payload.isLoading };
@@ -47,6 +55,7 @@ export default function reducer(state: PhotosState = defaultState, action) {
 }
 
 export const getPhotos = (state) => state.photos.items;
+export const getTotalCount = (state) => state.photos.totalCount;
 export const getFailed = (state) => state.photos.failed;
 export const getIsLoading = (state) => state.photos.isLoading;
 export const getThumbnails = (state): ThumbnailUrl =>
@@ -60,17 +69,22 @@ export const getThumbnails = (state): ThumbnailUrl =>
 
 export const loading = () => createAction(LOAD, { isLoading: true });
 
-export const success = (items: PhotosObj) =>
-  createAction(SUCCESS, { items, isLoading: false });
+export const success = ({ data: items, totalCount }: PhotosResponse) =>
+  createAction(SUCCESS, { items, totalCount, isLoading: false });
 
 export const fail = () => createAction(FAIL, { isLoading: false });
 
 export const fetchPhotos = (options: FetchOptions) => async (dispatch) => {
   dispatch(loading());
   try {
-    const photos: Photo[] = await apiGetPhotos(options);
-    const normalizedData = normalize(photos, photoList);
-    dispatch(success(normalizedData.entities.photos));
+    const photosResponse: PhotosResponse = await apiGetPhotos(options);
+    const normalizedData = normalize(photosResponse.data, photoList);
+    dispatch(
+      success({
+        data: normalizedData.entities.photos,
+        totalCount: photosResponse.totalCount,
+      }),
+    );
   } catch (err) {
     dispatch(fail());
   }

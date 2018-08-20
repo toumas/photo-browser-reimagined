@@ -1,10 +1,17 @@
 import { Component } from 'react';
 import { connect, DispatchProp } from 'react-redux';
 import { match } from 'react-router';
+import { push } from 'react-router-redux';
 
 import { ApplicationState } from '../../reducers';
 import { FetchOptions, Photo, PhotosProps } from '../../typings';
-import { fetchPhotos, getFailed, getIsLoading, getPhotos } from './Duck';
+import {
+  fetchPhotos,
+  getFailed,
+  getIsLoading,
+  getPhotos,
+  getTotalCount,
+} from './Duck';
 
 interface Props {
   match: match<{}>;
@@ -15,6 +22,8 @@ interface PropsFromState {
   failed: boolean;
   isLoading: boolean;
   photos: Photo[];
+  totalCount: number;
+  navigate(page: number): void;
 }
 
 interface PropsFromDispatch {
@@ -23,7 +32,7 @@ interface PropsFromDispatch {
 
 type PhotosContainerProps = PropsFromState & PropsFromDispatch;
 
-function getPath(currentPath: string, currentPage: string, id: string): string {
+function getPath(currentPath: string, currentPage: string, id: number): string {
   if (currentPath === '/') {
     return `/page/${currentPage}/photo/${id}`;
   }
@@ -73,15 +82,22 @@ export class PhotosContainer extends Component<PhotosContainerProps & Props> {
     }
   }
 
-  getPath = (id: string) =>
+  getPath = (id: number) =>
     getPath(this.props.match.url, this.state.options.page, id);
 
   fetchPhotos = () => {
     this.props.fetchPhotos(this.state.options);
   };
 
+  handlePaginationChange = (e, { activePage }) => {
+    this.props.navigate(activePage);
+  };
+
   render() {
-    const { children, failed, isLoading, photos } = this.props;
+    const { children, failed, isLoading, photos, totalCount } = this.props;
+    const {
+      options: { page: activePage, limit },
+    } = this.state;
 
     return children({
       failed,
@@ -90,6 +106,11 @@ export class PhotosContainer extends Component<PhotosContainerProps & Props> {
       // tslint:disable-next-line
       getPath: this.getPath,
       retry: this.fetchPhotos,
+      handlePaginationChange: this.handlePaginationChange,
+      paginationOptions: {
+        activePage,
+        totalPages: Math.ceil(totalCount / parseInt(limit, 10)),
+      },
     });
   }
 }
@@ -98,10 +119,12 @@ export const mapStateToProps = (state: ApplicationState) => ({
   failed: getFailed(state),
   isLoading: getIsLoading(state),
   photos: Object.values(getPhotos(state)),
+  totalCount: getTotalCount(state),
 });
 
 export const mapDispatchToProps = (dispatch) => ({
   fetchPhotos: (options: FetchOptions) => dispatch(fetchPhotos(options)),
+  navigate: (page) => dispatch(push(`/page/${page}`)),
 });
 
 export default connect(

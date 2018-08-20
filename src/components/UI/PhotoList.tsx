@@ -1,20 +1,36 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Responsive } from 'semantic-ui-react';
+import { Grid, Pagination, Responsive } from 'semantic-ui-react';
 
-import { Photo, PhotoList } from '../../typings';
+import { PaginationOptions, Photo, PhotoList } from '../../typings';
 import Retry from './Retry';
 
-const PhotoList: React.SFC<PhotoList> = (props: PhotoList) => {
-  const { isLoading, failed, retry, photos, children, getPath } = props;
+const PhotoList: React.SFC<PhotoList> = (props) => {
+  const {
+    isLoading,
+    failed,
+    retry,
+    photos,
+    children,
+    getPath,
+    paginationOptions,
+    handlePaginationChange,
+  } = props;
   if (isLoading) {
     return <React.Fragment>Loading...</React.Fragment>;
   }
   if (failed) {
     return <Retry text="Failed to load content" handleClick={retry} />;
   }
-  // @ts-ignore https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11640
-  return renderPhotos(photos, getPath, children);
+
+  return renderPhotos(
+    photos,
+    getPath,
+    paginationOptions,
+    handlePaginationChange,
+    // @ts-ignore https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11640
+    children,
+  );
 };
 
 PhotoList.defaultProps = {
@@ -47,6 +63,8 @@ function renderPhoto(
 export function renderPhotos(
   photos: Photo[],
   getPath: (id: number) => string,
+  paginationOptions: PaginationOptions,
+  handlePaginationChange: (event: React.SyntheticEvent, data: object) => any,
   children: (photo: Photo) => any,
 ) {
   return (
@@ -76,6 +94,29 @@ export function renderPhotos(
           </React.Fragment>
         ),
       )}
+      <Grid.Column width={16} textAlign="center">
+        <Responsive maxWidth={575}>
+          <Pagination
+            activePage={paginationOptions.activePage}
+            totalPages={paginationOptions.totalPages}
+            onPageChange={handlePaginationChange}
+            boundaryRange={0}
+            siblingRange={1}
+            firstItem={null}
+            lastItem={null}
+            size="tiny"
+          />
+        </Responsive>
+        <Responsive minWidth={576}>
+          <Pagination
+            activePage={paginationOptions.activePage}
+            totalPages={paginationOptions.totalPages}
+            onPageChange={handlePaginationChange}
+            boundaryRange={1}
+            siblingRange={1}
+          />
+        </Responsive>
+      </Grid.Column>
     </Grid>
   );
 }
