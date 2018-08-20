@@ -13,7 +13,7 @@ interface PhotosObj {
   readonly [key: string]: Photo;
 }
 
-interface PhotosResponse {
+export interface PhotosResponse {
   readonly data: Photo[];
   readonly totalCount: number;
 }

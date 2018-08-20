@@ -47,5 +47,7 @@ export const getPhoto = async (id: string) => {
 export const getAlbums = async (options: FetchOptions) => {
   const queryParams = optionsToQueryParams(options);
   const response = await fetch(`${base}/albums?${queryParams}`);
-  return response.json();
+  const totalCount = response.headers.get('X-Total-Count') || '0';
+  const data = await response.json();
+  return { data, totalCount: parseInt(totalCount, 10) };
 };
