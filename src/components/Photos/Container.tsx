@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { connect, DispatchProp } from 'react-redux';
-import { match } from 'react-router';
+import { match, withRouter } from 'react-router';
 import { push } from 'react-router-redux';
 
 import { ApplicationState } from '../../reducers';
@@ -122,12 +122,20 @@ export const mapStateToProps = (state: ApplicationState) => ({
   totalCount: getTotalCount(state),
 });
 
-export const mapDispatchToProps = (dispatch) => ({
+export const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchPhotos: (options: FetchOptions) => dispatch(fetchPhotos(options)),
-  navigate: (page) => dispatch(push(`/page/${page}`)),
+  navigate: (page: number) => {
+    if (ownProps.match.url === '/') {
+      dispatch(push(`page/${page}`));
+    } else {
+      dispatch(push(`${page}`));
+    }
+  },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PhotosContainer);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(PhotosContainer),
+);

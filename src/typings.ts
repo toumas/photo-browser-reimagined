@@ -51,6 +51,7 @@ export interface FetchOptions {
   limit?: string;
   page?: string;
   expand?: string;
+  albumId?: string;
 }
 
 export interface AlbumThumbnail {
