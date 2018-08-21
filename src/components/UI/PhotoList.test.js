@@ -19,6 +19,7 @@ function getProps() {
       },
     ],
     retry: () => {},
+    paginationOptions: { activePage: 1, totalPages: 1 },
   };
 }
 

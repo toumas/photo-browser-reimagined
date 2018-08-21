@@ -60,13 +60,10 @@ export default function reducer(state: AlbumsState = defaultState, action) {
 
 export const applyThumbnailUrls = (thumbnailsUrls, items: AlbumsObj) =>
   Object.entries(thumbnailsUrls).reduce((acc, entry) => {
-    if (typeof items[entry[0]] !== 'undefined') {
-      return {
-        ...acc,
-        [entry[0]]: { ...items[entry[0]], thumbnailUrl: entry[1] },
-      };
-    }
-    return { ...acc };
+    return {
+      ...acc,
+      [entry[0]]: { ...items[entry[0]], thumbnailUrl: entry[1] },
+    };
   }, {});
 
 export const getTotalCount = (state) => state.albums.totalCount;
@@ -99,15 +96,15 @@ export const fetchAlbums = (options: FetchOptions) => async (dispatch) => {
       const photos = photoResponses.map((res: PhotosResponse) => res.data);
       const normalizedPhotos = normalize(photos, [photoList]);
       dispatch(
-        success({
-          data: normalizedData.entities.albums,
-          totalCount: albumsResponse.totalCount,
-        }),
-      );
-      dispatch(
         photosSuccess({
           data: normalizedPhotos.entities.photos,
           totalCount: 0,
+        }),
+      );
+      dispatch(
+        success({
+          data: normalizedData.entities.albums,
+          totalCount: albumsResponse.totalCount,
         }),
       );
     } catch (err) {

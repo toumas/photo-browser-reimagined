@@ -118,10 +118,11 @@ describe('action creators', () => {
       payload: {
         isLoading: false,
         items: normalizedAlbums,
+        totalCount: 2,
       },
       meta: undefined,
     };
-    expect(success(normalizedAlbums)).toEqual(action);
+    expect(success({ data: normalizedAlbums, totalCount: 2 })).toEqual(action);
   });
 });
 
@@ -134,33 +135,33 @@ describe('async actions', () => {
   it('should create success action when fetch was successful', () => {
     fetchMock.getOnce('http://localhost:3000/albums?_page=1&_limit=2&', {
       body: { ...albums },
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', 'X-Total-Count': '2' },
     });
 
     fetchMock.getOnce('http://localhost:3000/photos?albumId=1&_limit=1&', {
       body: { ...thumbnail1 },
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', 'X-Total-Count': '5000' },
     });
 
     fetchMock.getOnce('http://localhost:3000/photos?albumId=2&_limit=1&', {
       body: { ...thumbnail2 },
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', 'X-Total-Count': '5000' },
     });
 
     const store = mockStore({
-      albums: { failed: false, isLoading: false, items: {} },
+      albums: { failed: false, isLoading: false, items: {}, totalCount: 0 },
     });
     const expectedActions = [
       { type: LOAD, payload: { isLoading: true }, meta: undefined },
       { type: PHOTOS_LOAD, payload: { isLoading: true }, meta: undefined },
       {
-        type: SUCCESS,
-        payload: { isLoading: false, items: normalizedAlbums },
+        type: PHOTOS_SUCCESS,
+        payload: { isLoading: false, items: normalizedPhotos, totalCount: 0 },
         meta: undefined,
       },
       {
-        type: PHOTOS_SUCCESS,
-        payload: { isLoading: false, items: normalizedPhotos },
+        type: SUCCESS,
+        payload: { isLoading: false, items: normalizedAlbums, totalCount: 2 },
         meta: undefined,
       },
     ];
@@ -250,6 +251,7 @@ describe('reducer', () => {
       failed: false,
       isLoading: false,
       items: {},
+      totalCount: 0,
     });
   });
 

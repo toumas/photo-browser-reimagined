@@ -6,7 +6,8 @@ import {
   mapDispatchToProps,
   mapStateToProps,
 } from './Container.tsx';
-import { fetchPhotos, getFailed, getIsLoading, getPhotos } from './Duck';
+import { fetchPhotos, getFailed, getIsLoading, getPhotos } from './Duck.ts';
+import { push } from 'react-router-redux';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -19,6 +20,7 @@ function getProps() {
     fetchPhotos: jest.fn(),
     isLoading: false,
     match: { isExact: true, path: '/', url: '/', params: {} },
+    navigate: jest.fn(),
     photos: [
       {
         albumId: 1,
@@ -139,6 +141,21 @@ describe('PhotosContainer component', () => {
         limit: '10',
       })(store.dispatch),
     );
+    expect(
+      mapDispatchToProps(store.dispatch, { match: { url: '/' } }).navigate(2),
+    ).toEqual({
+      payload: { args: ['page/2'], method: 'push' },
+      type: '@@router/CALL_HISTORY_METHOD',
+    });
+
+    expect(
+      mapDispatchToProps(store.dispatch, {
+        match: { url: '/page/1' },
+      }).navigate(2),
+    ).toEqual({
+      payload: { args: ['2'], method: 'push' },
+      type: '@@router/CALL_HISTORY_METHOD',
+    });
   });
 
   it('should map state to props', () => {
@@ -151,5 +168,13 @@ describe('PhotosContainer component', () => {
       isLoading: getIsLoading(state),
       photos: Object.values(getPhotos(state)),
     });
+  });
+
+  it('should invoke navigate on pagination change', () => {
+    const wrapper = shallow(
+      <PhotosContainer {...getProps()}>{() => {}}</PhotosContainer>,
+    );
+    wrapper.instance().handlePaginationChange(null, {});
+    expect(wrapper.instance().props.navigate).toHaveBeenCalledTimes(1);
   });
 });

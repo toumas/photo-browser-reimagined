@@ -5,8 +5,8 @@ import {
   PhotoContainer,
   mapDispatchToProps,
   mapStateToProps,
-} from './Container';
-import { fetchPhoto, getFailed, getIsLoading, getPhoto } from './Duck';
+} from './Container.ts';
+import { fetchPhoto, getFailed, getIsLoading, getPhoto } from './Duck.ts';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -22,10 +22,12 @@ const getProps = () => ({
       id: '1',
     },
   },
+  location: { state: undefined },
   failed: false,
   isLoading: false,
   photo: {},
   fetchPhoto: jest.fn(),
+  navigate: jest.fn(),
 });
 
 describe('PhotoContainer component', () => {
@@ -94,6 +96,11 @@ describe('PhotoContainer component', () => {
     });
     const props = mapDispatchToProps(store.dispatch);
     expect(props.fetchPhoto('1')).toEqual(fetchPhoto('1')(store.dispatch));
+
+    expect(mapDispatchToProps(store.dispatch).navigate('/')).toEqual({
+      payload: { args: ['/'], method: 'push' },
+      type: '@@router/CALL_HISTORY_METHOD',
+    });
   });
 
   it('should map state to props', () => {
@@ -106,5 +113,16 @@ describe('PhotoContainer component', () => {
       isLoading: getIsLoading(state),
       photo: getPhoto(state),
     });
+  });
+
+  it('should invoke navigate on dimmer click', () => {
+    const wrapper = shallow(
+      <PhotoContainer {...getProps()}>{() => {}}</PhotoContainer>,
+    );
+    wrapper.instance().handleDimmerClick();
+    expect(wrapper.instance().props.navigate).toHaveBeenCalledTimes(1);
+    wrapper.setProps({ location: { state: { parentPath: '/' } } });
+    wrapper.instance().handleDimmerClick();
+    expect(wrapper.instance().props.navigate).toHaveBeenCalledTimes(2);
   });
 });
