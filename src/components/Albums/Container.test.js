@@ -6,8 +6,8 @@ import {
   getPath,
   mapDispatchToProps,
   mapStateToProps,
-} from './Container';
-import { getFailed, getIsLoading, getAlbums, fetchAlbums } from './Duck';
+} from './Container.ts';
+import { getFailed, getIsLoading, getAlbums, fetchAlbums } from './Duck.ts';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -16,6 +16,7 @@ const mockStore = configureMockStore(middlewares);
 
 function getProps() {
   return {
+    getPath,
     match: {
       path: '/albums',
       url: '/albums',
@@ -33,7 +34,7 @@ function getProps() {
       },
     ],
     fetchAlbums: jest.fn(),
-    getPath,
+    navigate: jest.fn(),
   };
 }
 
@@ -118,12 +119,25 @@ describe('AlbumsContainer component', () => {
     expect(wrapper.instance().props.fetchAlbums).toHaveBeenCalledTimes(2);
   });
 
+  it('should invoke navigate on pagination change', () => {
+    const wrapper = shallow(
+      <AlbumsContainer {...getProps()}>{() => {}}</AlbumsContainer>,
+    );
+    wrapper.instance().handlePaginationChange(null, {});
+    expect(wrapper.instance().props.navigate).toHaveBeenCalledTimes(1);
+  });
+
   it('should map dispatch to props', () => {
     const store = mockStore({
       albums: { failed: false, isLoading: false, items: {} },
     });
     const props = mapDispatchToProps(store.dispatch);
     expect(props.fetchAlbums('1')).toEqual(fetchAlbums('1')(store.dispatch));
+
+    expect(props.navigate(2)).toEqual({
+      payload: { args: ['/albums/page/2'], method: 'push' },
+      type: '@@router/CALL_HISTORY_METHOD',
+    });
   });
 
   it('should map state to props', () => {

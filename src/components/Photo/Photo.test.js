@@ -30,9 +30,9 @@ describe('Photo component', () => {
     expect(wrapper.find('Retry')).toHaveLength(1);
   });
 
-  it('should render photo when props isLoading and failed equal false', () => {
+  it('should render photo modal when props isLoading and failed equal false', () => {
     const wrapper = shallow(<Photo {...getProps()} />);
     wrapper.setProps({ isLoading: false, failed: false });
-    expect(wrapper.find('img')).toHaveLength(1);
+    expect(wrapper.find('Modal > Image')).toHaveLength(1);
   });
 });

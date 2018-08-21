@@ -126,10 +126,9 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchPhotos: (options: FetchOptions) => dispatch(fetchPhotos(options)),
   navigate: (page: number) => {
     if (ownProps.match.url === '/') {
-      dispatch(push(`page/${page}`));
-    } else {
-      dispatch(push(`${page}`));
+      return dispatch(push(`page/${page}`));
     }
+    return dispatch(push(`${page}`));
   },
 });
 

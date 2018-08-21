@@ -83,10 +83,11 @@ describe('action creators', () => {
       payload: {
         isLoading: false,
         items: normalizedPhotos,
+        totalCount: 2,
       },
       meta: undefined,
     };
-    expect(success(normalizedPhotos)).toEqual(action);
+    expect(success({ data: normalizedPhotos, totalCount: 2 })).toEqual(action);
   });
 });
 
@@ -99,6 +100,29 @@ describe('async actions', () => {
   it('should create success action when fetch was successful', () => {
     fetchMock.getOnce('http://localhost:3000/photos?_page=1&_limit=2&', {
       body: { ...photos },
+      headers: { 'content-type': 'application/json', 'X-Total-Count': '2' },
+    });
+
+    const store = mockStore({
+      photos: { failed: false, isLoading: false, items: {} },
+    });
+    const expectedActions = [
+      { type: LOAD, payload: { isLoading: true }, meta: undefined },
+      {
+        type: SUCCESS,
+        payload: { isLoading: false, items: normalizedPhotos, totalCount: 2 },
+        meta: undefined,
+      },
+    ];
+
+    return store.dispatch(fetchPhotos({ page: '1', limit: '2' })).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+
+  it('should default totalCount to 0 if X-Total-Count header is not present', () => {
+    fetchMock.getOnce('http://localhost:3000/photos?_page=1&_limit=2&', {
+      body: { ...photos },
       headers: { 'content-type': 'application/json' },
     });
 
@@ -109,7 +133,7 @@ describe('async actions', () => {
       { type: LOAD, payload: { isLoading: true }, meta: undefined },
       {
         type: SUCCESS,
-        payload: { isLoading: false, items: normalizedPhotos },
+        payload: { isLoading: false, items: normalizedPhotos, totalCount: 0 },
         meta: undefined,
       },
     ];
@@ -173,6 +197,7 @@ describe('reducer', () => {
       failed: false,
       isLoading: false,
       items: {},
+      totalCount: 0,
     });
   });
 
