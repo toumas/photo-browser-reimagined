@@ -1,13 +1,13 @@
 import { Component } from 'react';
 import { connect, DispatchProp } from 'react-redux';
-import { match } from 'react-router';
+import { RouteComponentProps } from 'react-router';
+import { push } from 'react-router-redux';
 
 import { ApplicationState } from '../../reducers';
-import { Photo, PhotoContainerMatchParams } from '../../typings';
+import { Photo } from '../../typings';
 import { fetchPhoto, getFailed, getIsLoading, getPhoto } from './Duck';
 
-interface Props {
-  match: match<PhotoContainerMatchParams>;
+interface Props extends RouteComponentProps<{ id: string }> {
   children(props): JSX.Element;
 }
 
@@ -15,6 +15,7 @@ interface PropsFromState {
   failed: boolean;
   isLoading: boolean;
   photo: Photo;
+  navigate(url: string): void;
 }
 
 interface PropsFromDispatch {
@@ -34,6 +35,19 @@ export class PhotoContainer extends Component<PhotoContainerProps & Props> {
     }
   }
 
+  handleDimmerClick = () => {
+    const {
+      location: { state },
+      navigate,
+    } = this.props;
+    if (state && state.parentPath) {
+      navigate(this.props.location.state.parentPath);
+    } else {
+      const pathname: string[] = window.location.pathname.split('/');
+      navigate(pathname.slice(0, pathname.length - 2).join('/'));
+    }
+  };
+
   render() {
     const {
       failed,
@@ -43,7 +57,14 @@ export class PhotoContainer extends Component<PhotoContainerProps & Props> {
       children,
     } = this.props;
 
-    return children({ failed, isLoading, photo, retry });
+    return children({
+      failed,
+      isLoading,
+      photo,
+      retry,
+      // tslint:disable-next-line
+      onDimmerClick: this.handleDimmerClick,
+    });
   }
 }
 
@@ -55,6 +76,7 @@ export const mapStateToProps = (state: ApplicationState) => ({
 
 export const mapDispatchToProps = (dispatch) => ({
   fetchPhoto: (id: string) => dispatch(fetchPhoto(id)),
+  navigate: (url: string) => dispatch(push(url)),
 });
 
 export default connect(
