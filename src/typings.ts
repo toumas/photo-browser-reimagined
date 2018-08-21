@@ -23,8 +23,10 @@ export interface AlbumsProps {
   failed: boolean;
   isLoading: boolean;
   photos: AlbumThumbnail[];
+  paginationOptions: PaginationOptions;
+  handlePaginationChange(e: SyntheticEvent, data: object): void;
   retry(): void;
-  getPath(id: string): string;
+  getPath(id: number): string;
 }
 
 export interface PhotoList {
