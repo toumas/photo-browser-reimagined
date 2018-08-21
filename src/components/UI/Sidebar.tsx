@@ -1,6 +1,6 @@
 import { Location } from 'history';
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { Header, Icon, Menu, Responsive } from 'semantic-ui-react';
 
 const Sidebar: React.SFC<{ location: Location }> = () => (
@@ -13,7 +13,9 @@ const Sidebar: React.SFC<{ location: Location }> = () => (
     style={{ height: '100vh' }}
   >
     <Menu.Item header={true} position="left" style={{ textAlign: 'left' }}>
-      <Header as="h1">Photo Browser</Header>
+      <Header as="h1">
+        <Link to="/">Photo Browser</Link>
+      </Header>
     </Menu.Item>
     <Menu.Item name="photos" link={true} exact={true} as={NavLink} to="/">
       <Header as="h2">

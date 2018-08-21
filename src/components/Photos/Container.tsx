@@ -67,7 +67,7 @@ export class PhotosContainer extends Component<PhotosContainerProps & Props> {
 
   state = {
     options: {
-      limit: '10',
+      limit: '15',
       page: '1',
     },
   };

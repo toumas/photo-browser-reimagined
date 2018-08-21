@@ -64,7 +64,7 @@ export class AlbumsContainer extends Component<AlbumsContainerProps & Props> {
 
   state = {
     options: {
-      limit: '10',
+      limit: '15',
       page: '1',
     },
   };

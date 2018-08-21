@@ -1,6 +1,6 @@
 import { Location } from 'history';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import {
   Accordion,
   Grid,
@@ -39,7 +39,9 @@ class CollapsibleMenu extends React.Component<
               size="big"
             />
             <Menu.Header>
-              <Header as="h1">Photo Browser</Header>
+              <Header as="h1">
+                <Link to="/">Photo Browser</Link>
+              </Header>
             </Menu.Header>
           </Grid.Row>
           {activeIndex === 0 && (
