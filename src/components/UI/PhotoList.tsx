@@ -48,7 +48,12 @@ function renderPhoto(
       style={{ display: 'inline-block', width: '100%' }}
       key={photo.id}
     >
-      <Link to={getPath(photo.id)}>
+      <Link
+        to={{
+          pathname: getPath(photo.id),
+          state: { parentPath: window.location.pathname },
+        }}
+      >
         <img
           src={photo.thumbnailUrl}
           alt={photo.title}

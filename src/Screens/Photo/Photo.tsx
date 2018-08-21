@@ -5,10 +5,10 @@ import PhotoContainer from '../../components/Photo/Container';
 import Photo from '../../components/Photo/Photo';
 import { PhotoContainerMatchParams, PhotoProps } from '../../typings';
 
-const ScreensPhoto: SFC<RouteComponentProps<PhotoContainerMatchParams>> = ({
-  match,
-}) => (
-  <PhotoContainer match={match}>
+const ScreensPhoto: SFC<RouteComponentProps<PhotoContainerMatchParams>> = (
+  routeProps,
+) => (
+  <PhotoContainer {...routeProps}>
     {(props: PhotoProps) => <Photo {...props} />}
   </PhotoContainer>
 );

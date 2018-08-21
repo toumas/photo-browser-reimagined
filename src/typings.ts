@@ -67,6 +67,7 @@ export interface PhotoProps {
   isLoading: boolean;
   photo: Photo;
   retry(): DispatchProp;
+  onDimmerClick(): void;
 }
 
 export interface Album {
